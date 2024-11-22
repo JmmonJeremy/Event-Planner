@@ -1,20 +1,16 @@
-// src/routes/index.ts
-import express from 'express';
+import { Router } from 'express';
+import userRoutes from './user';
+import eventRoutes from './events';
+import goalRoutes from './goals';
+import classRoutes from './classes';
+import holidayRoutes from './holidays';
 
-const router = express.Router();
+const routes = Router();
 
-/**
- * @swagger
- * /example:
- *   get:
- *     summary: Example endpoint
- *     description: Returns an example response.
- *     responses:
- *       200:
- *         description: Success
- */
-router.get('/example', (req, res) => {
-    res.json({ message: 'Example endpoint' });
-});
+routes.use(userRoutes);
+routes.use(eventRoutes);
+routes.use(goalRoutes);
+routes.use(classRoutes);
+routes.use(holidayRoutes);
 
-export default router;
+export default routes;
