@@ -18,19 +18,25 @@
           {
             "name": "body",
             "in": "body",
+            "description": "Fields to update",
+            "required": true,
             "schema": {
               "type": "object",
               "properties": {
                 "name": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "Bob Dole"
                 },
                 "email": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "spicey@hotmail.com"
                 },
                 "password": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "password123"
                 }
-              }
+              },
+              "required": "email"
             }
           }
         ],
@@ -39,7 +45,7 @@
             "description": "Created"
           },
           "400": {
-            "description": "Bad Request"
+            "description": "BAD REQUEST your PUT was attempted with forbidden entries"
           }
         }
       }
