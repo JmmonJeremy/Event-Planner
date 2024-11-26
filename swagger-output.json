@@ -11,37 +11,26 @@
     "http"
   ],
   "paths": {
-    "/api/user": {
+    "/user": {
       "post": {
         "description": "",
         "parameters": [
           {
             "name": "body",
             "in": "body",
-            "description": "Create a new user in the system",
-            "required": true,
             "schema": {
               "type": "object",
               "properties": {
                 "name": {
-                  "type": "string",
-                  "example": "Bob Dole"
+                  "example": "any"
                 },
                 "email": {
-                  "type": "string",
-                  "format": "email",
-                  "example": "spicey@hotmail.com"
+                  "example": "any"
                 },
                 "password": {
-                  "type": "string",
-                  "example": "password123"
+                  "example": "any"
                 }
-              },
-              "required": [
-                "name",
-                "email",
-                "password"
-              ]
+              }
             }
           }
         ],

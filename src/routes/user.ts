@@ -3,34 +3,7 @@ import bcrypt from 'bcryptjs';
 import UserModel from '../models/userModel';
 
 const userRoutes = Router();
-userRoutes.post('/user', async (req: Request, res: Response) => {
-  // #swagger.path = '/api/user'
-  /* #swagger.parameters['body'] = {
-      in: 'body',
-      description: 'Create a new user in the system',
-      required: true,
-      '@schema': {
-        "type": "object",
-        "properties": {            
-          "name": {
-            "type": "string",
-            "example": "Bob Dole"
-          },
-          "email": {
-            "type": "string",
-            "format": "email",
-            "example": "spicey@hotmail.com"
-          },
-          "password": {
-            "type": "string",
-            "example": "password123"
-          }
-        },
-        "required": ["name", "email", "password"]
-      }
-    }
-*/
-
+userRoutes.post('/user', async (req: Request, res: Response) => { 
   const { name, email, password } = req.body;
 
   try {

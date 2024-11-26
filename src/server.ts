@@ -1,6 +1,5 @@
 import express, { Express, Request, Response } from "express";
 import swaggerUi from "swagger-ui-express";
-// import swaggerJsDoc from 'swagger-jsdoc'; 
 import dotenv from "dotenv";
 import cors from "cors";
 import { connectDB } from "./config/database"; 
@@ -39,7 +38,7 @@ app.use(cors()); // Enable CORS for external access
     app.get("/", (req: Request, res: Response) => {
       res.send("Welcome to the API! Documentation available at /api-docs");
     });
-    app.use("/api", routes);
+    app.use("/", routes);
     app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
     // Global error handler (Placing below routes ensures the error handler is the last middleware in the stack,

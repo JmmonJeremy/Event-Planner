@@ -19,7 +19,7 @@ const doc = {
     host: isProduction
     ? 'p2-web-services-w4.onrender.com'
     : 'localhost:3000',
-    basePath: '/api',
+    basePath: '/',
     schemes: isProduction ? ['https'] : ['http'],
 };
 
