@@ -4,33 +4,32 @@ import UserModel from '../models/userModel';
 
 const userRoutes = Router();
 userRoutes.post('/user', async (req: Request, res: Response) => {
-  // #swagger.responses[400] = { description: 'BAD REQUEST your PUT was attempted with forbidden entries'}
-
   /* #swagger.parameters['body'] = {
-        in: 'body',
-        description: 'Fields to update',
-        required: true,
-         '@schema': {
-          "type": "object",
-          "properties": {            
-            "name": {
-              "type": "string",
-              "example": "Bob Dole"
-            },
-            "email": {
-              "type": "string",
-              "example": "spicey@hotmail.com"
-            },
-            "password": {
-              "type": "string",
-              "example": "password123"
-            }           
+      in: 'body',
+      description: 'Create a new user in the system',
+      required: true,
+      '@schema': {
+        "type": "object",
+        "properties": {            
+          "name": {
+            "type": "string",
+            "example": "Bob Dole"
           },
-          "required": "email"
-        }
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "spicey@hotmail.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "password123"
+          }
+        },
+        "required": ["name", "email", "password"]
       }
     }
-  */
+*/
+
   const { name, email, password } = req.body;
 
   try {

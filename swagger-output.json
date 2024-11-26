@@ -18,7 +18,7 @@
           {
             "name": "body",
             "in": "body",
-            "description": "Fields to update",
+            "description": "Create a new user in the system",
             "required": true,
             "schema": {
               "type": "object",
@@ -29,6 +29,7 @@
                 },
                 "email": {
                   "type": "string",
+                  "format": "email",
                   "example": "spicey@hotmail.com"
                 },
                 "password": {
@@ -36,7 +37,11 @@
                   "example": "password123"
                 }
               },
-              "required": "email"
+              "required": [
+                "name",
+                "email",
+                "password"
+              ]
             }
           }
         ],
@@ -45,7 +50,7 @@
             "description": "Created"
           },
           "400": {
-            "description": "BAD REQUEST your PUT was attempted with forbidden entries"
+            "description": "Bad Request"
           }
         }
       }
