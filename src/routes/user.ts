@@ -4,6 +4,7 @@ import UserModel from '../models/userModel';
 
 const userRoutes = Router();
 userRoutes.post('/user', async (req: Request, res: Response) => {
+  // #swagger.path = '/api/user'
   /* #swagger.parameters['body'] = {
       in: 'body',
       description: 'Create a new user in the system',

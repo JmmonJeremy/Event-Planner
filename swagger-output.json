@@ -11,7 +11,7 @@
     "http"
   ],
   "paths": {
-    "/user": {
+    "/api/user": {
       "post": {
         "description": "",
         "parameters": [
