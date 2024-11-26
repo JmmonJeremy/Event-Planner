@@ -7,8 +7,8 @@
     "build": "npx tsc",
     "start": "node dist/server.js",
     "dev": "nodemon src/server.ts",
-    "swagger": "node ./swagger.js",
-    "pro-swagger": "cross-env NODE_ENV=production node ./swagger.js"
+    "swagger": "ts-node ./src/swagger.ts",
+    "pro-swagger": "cross-env NODE_ENV=production ts-node ./swagger.js"
   },
   "author": "",
   "license": "ISC",

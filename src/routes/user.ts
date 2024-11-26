@@ -3,50 +3,6 @@ import bcrypt from 'bcryptjs';
 import UserModel from '../models/userModel';
 
 const userRoutes = Router();
-/**
- * @swagger
- * /user:
- *   post:
- *     summary: Create a new user
- *     description: Creates a new user in the system
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *                 description: The name of the user
- *               email:
- *                 type: string
- *                 format: email
- *                 description: The email of the user
- *               password:
- *                 type: string
- *                 description: The password for the user
- *             required:
- *               - name
- *               - email
- *               - password
- *     responses:
- *       201:
- *         description: Successfully created the user
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 name:
- *                   type: string
- *                 email:
- *                   type: string
- *                 _id:
- *                   type: string
- *       400:
- *         description: Bad request if validation fails
- */
 userRoutes.post('/user', async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
 

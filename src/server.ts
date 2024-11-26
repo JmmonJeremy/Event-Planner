@@ -1,10 +1,12 @@
 import express, { Express, Request, Response } from "express";
 import swaggerUi from "swagger-ui-express";
-import swaggerJsDoc from 'swagger-jsdoc'; 
+// import swaggerJsDoc from 'swagger-jsdoc'; 
 import dotenv from "dotenv";
 import cors from "cors";
 import { connectDB } from "./config/database"; 
 import routes from "./routes"; 
+import swaggerDocument from "../swagger-output.json"; // Path to the generated Swagger JSON file
+
 dotenv.config();
 
 const app: Express = express();
@@ -25,30 +27,6 @@ process.on("unhandledRejection", (reason, promise) => {
 // Middleware
 app.use(express.json());
 app.use(cors()); // Enable CORS for external access
-
-// Swagger configuration
-const swaggerOptions: swaggerJsDoc.Options = {
-  definition: {
-    openapi: '3.0.0',
-    info: {
-      title: 'User API',
-      version: '1.0.0',
-      description: 'This is the API documentation for user management',
-    },
-    servers: [
-      {
-        url: `http://localhost:${process.env.PORT || 3000}/api`,
-      },
-    ],
-  },
-  // Dynamically choose between .ts (for development) and .js (for production)
-  apis: process.env.NODE_ENV === 'production' 
-    ? ['./dist/routes/*.js']  // Path to the compiled JavaScript files in production
-    : ['./src/routes/*.ts'],  // Path to your route TypeScript files  in development (with Swagger annotations)
-};
-
-// Initialize swagger-jsdoc
-const swaggerDocument = swaggerJsDoc(swaggerOptions);
 
 // Connect to MongoDB and start the server 
 // (wrapped in an async function to simplify structure and improve clarity )
