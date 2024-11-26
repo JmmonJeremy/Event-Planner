@@ -4,8 +4,8 @@
   "description": "API for an event planning app.",
   "main": "dist/index.js",
   "scripts": {
-    "start": "npx tsc && node dist/server.js",
-    "dev": "nodemon src/server.ts",
+    "start": "npm run pro-swagger && npx tsc && node dist/server.js",
+    "dev": "npm run swagger && nodemon src/server.ts",
     "swagger": "ts-node ./src/swagger.ts",
     "pro-swagger": "cross-env NODE_ENV=production ts-node ./src/swagger.ts"
   },
