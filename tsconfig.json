@@ -112,8 +112,7 @@
   "include": [
     "src/**/*", 
     "global.d.ts",
-    "src/**/*.ts",
-    "src/swagger.ts"  // If it's in the root directory
+    "src/**/*.ts"    
   ]
 }
 
