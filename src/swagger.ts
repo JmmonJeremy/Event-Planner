@@ -17,7 +17,7 @@ const doc = {
         description: 'Calendar API',
     },
     host: isProduction
-    ? 'https://event-planner-nkma.onrender.com'
+    ? 'event-planner-nkma.onrender.com'
     : 'localhost:3000',
     basePath: '/',
     schemes: isProduction ? ['https'] : ['http'],

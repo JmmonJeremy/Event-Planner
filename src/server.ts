@@ -24,8 +24,9 @@ process.on("unhandledRejection", (reason, promise) => {
 });
 
 // Middleware
-app.use(express.json());
 app.use(cors()); // Enable CORS for external access
+app.use(express.json());
+
 
 // Connect to MongoDB and start the server 
 // (wrapped in an async function to simplify structure and improve clarity )
