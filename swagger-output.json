@@ -1,14 +1,14 @@
 {
   "swagger": "2.0",
   "info": {
-    "version": "1.0.0",
-    "title": "REST API",
-    "description": ""
+    "title": "API Documentation",
+    "description": "Calendar API",
+    "version": "1.0.0"
   },
-  "host": "localhost:3000",
+  "host": "https://event-planner-nkma.onrender.com",
   "basePath": "/",
   "schemes": [
-    "http"
+    "https"
   ],
   "paths": {
     "/user": {
