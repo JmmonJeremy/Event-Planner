@@ -1,0 +1,63 @@
+{{!--  // google auth  --}}
+<h4><a href="/dashboard" class="brand-logo pg-link">Dashboard</a></h4>
+<a href="/auth/logout"><h5 class="pg-link logout">Logout<i class="fas fa-door-open log-icon"></i></h5></a>
+<h1 class="add-follower">CreationGoals</h1> 
+<h2>{{heading}}</h2>
+<ul class="search-form">
+    <li>    
+        <form id="search-site"  action='/creationGoals/search/:query' method='get'>
+            <div class="input-group">
+                    <i class="fas fa-search fa-large" ></i>
+                    <div class="unclosed-field">
+                    <input id="search" type="search" name='query' placeholder="&nbsp; &nbsp; Search by goal" class="search">
+                    <label class="label-icon" for="search">
+                    </label>
+                    
+                 </div>
+                 <div class="padding"></div>
+                <button type="submit" class="input-group-addon btn search">search</button>
+            </div>
+
+        </form>  
+    </li>   
+</ul>
+<div class="row">
+    {{#each creationGoals}}
+    {{log _id goal user.displayName}} <!-- This will log each creationGoal._id individually -->
+    <div class="col s12 m4">
+        <div class="card public-card">
+            <div class="card-image">                           
+                {{{editIcon user ../user _id}}}
+            </div>
+            <div class="card-content center-align">
+              <table>
+                <tr> 
+                    <th>Number</th> <td>{{creationNumber}} &nbsp; &nbsp; </td> <th>Date</th> <td>{{formatDate creationDate 'MM/DD/YYYY'}}</td>
+                </tr>
+              </table>
+              <table class="sm-view">
+                <tr> <th>Goal</th>  <td>{{truncate goal 35}}</td> </tr>
+                <tr> <th>Motivator</th>  <td>{{truncate motivator 35}}</td> </tr>
+                <tr> <th>Desire</th>  <td>{{truncate desire 35}}</td> </tr>               
+                <tr> <th>Belief</th> <td>{{truncate belief 35}}</td> </tr>
+                <tr> <th>Knowledge</th> <td>{{truncate knowledge 35}}</td> </tr> 
+                <tr> <th>Plan</th> <td>{{stripTags (truncate plan 35)}}</td> </tr>
+                <tr> <th>Action</th> <td>{{stripTags (truncate action 35)}}</td> </tr> 
+                <tr> <th>Victory</th> <td>{{stripTags (truncate victory 35)}}</td> </tr>
+                <tr> <th>Status</th> <td>{{status}}</td> </tr>
+                {{!-- <p>{{stripTags (truncate body 150)}}</p> --}} 
+              </table>           
+              <div class="chip">
+                  <img src="{{user.image}}" alt="">
+                  <a href="/creationGoals/user/{{user._id}}">{{user.displayName}}</a>
+              </div>
+            </div>
+            <div class="card-action center-align public-card-btm">
+                <a href="/creationGoals/{{_id}}" class="btn grey">Read More</a>
+            </div>
+        </div>
+    </div>
+    {{else}}
+    <p>No creationGoals to display</p>
+    {{/each}}
+</div>

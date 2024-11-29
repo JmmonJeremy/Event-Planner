@@ -1,0 +1,72 @@
+{{!--  // google auth  --}}
+<h4><a href="/creationGoals" class="pg-link">CreationGoals</a></h4>
+<a href="/auth/logout"><h5 class="pg-link logout">Logout<i class="fas fa-door-open log-icon"></i></h5></a>
+{{#if created}}
+    <div class="created"> 
+        <h5 class="pg-header" style="float: left;">Dashboard</h5>
+        <h5 class="flag" style="float: right;">CreationGoal successfully added!</h5>
+    </div>
+{{else if updated}}
+    <div class="created"> 
+        <h5 class="pg-header" style="float: left;">Dashboard</h5>
+        <h5 class="flag" style="float: right;">CreationGoal successfully updated!</h5>
+    </div>
+{{else if deleted}}
+    <div class="deleted"> 
+        <h5 class="pg-header" style="float: left;">Dashboard</h5>
+        <h5 class="flag" style="float: right;">CreationGoal successfully deleted!</h5>
+    </div>
+{{else if registered}}
+<div class="created"> 
+    <h5 class="pg-header" style="float: left;">Dashboard</h5>
+    <h5 class="flag" style="float: right;">You have successfully registered!</h5>
+</div>
+{{else}}
+    <h5 class="pg-header" style="float: left;">Dashboard</h5>
+{{/if}}
+
+<h3 class="welcome" style="clear: both;">Welcome {{name}}</h3>
+<h6 class="mini-header">Here are your goal creatioins:</h6>
+{{#if creationGoals}}
+<table class="striped">
+    <thead class="btm-bdr-yellow">
+        <tr>
+            <th>#</th>
+            <th>Date</th>
+            <th>Goal</th>
+            <th>Plan</th>            
+            <th>Status</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each creationGoals}}
+        {{log _id goal status}} <!-- This will log each creationGoal._id individually -->
+        <tr>
+            <td class="btm-bdr-yellow">{{creationNumber}}</td>
+            <td class="btm-bdr-yellow">{{formatDate creationDate 'MMMM Do YYYY, h:mm:ss a'}}</td>            
+            <td class="btm-bdr-yellow"><a class="goal-link" href="/creationGoals/{{_id}}">{{truncate goal 50}}</a></td>
+            <td class="btm-bdr-yellow">{{stripTags (truncate plan 35)}}</td>
+            
+            
+            <td class="btm-bdr-yellow"><span class="dash-status">{{status}}</span></td>
+            <td class="btm-bdr-yellow">
+                <a href="/creationGoals/edit/{{_id}}" class="btn btn-float">
+                    <i class="fas fa-edit"></i>
+                </a>
+
+                <form action="/creationGoals/{{_id}}" method="POST" id="delete-form" class="inline-form">
+                    {{!-- Used to replace POST with DELETE recognizing name of _method through method-override --}}
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button type="submit" class="btn red">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </form>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+{{else}}
+<p>You have no goals created</p>
+{{/if}}

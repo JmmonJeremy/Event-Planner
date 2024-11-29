@@ -1,0 +1,59 @@
+{{!--  // google auth  --}}
+{{#if accessDenied}}     
+            <h4 class="access-denied-message">Access Denied: Please try logging in again.</h4>        
+{{/if}}
+<div class="login-box">
+    <img class="img-logo" src="/images/google.svg" />
+    <h3><i class="fas fa-trophy"></i> GoalCreations</h3>
+    <div class="section">
+        <p class="lead">Newcomer 👋 or Member 🖖<br/><span class ="vc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; For entry into your<br/>🎇 <u>Victorious Creations</u></span> 🎇</p>
+    </div>
+    <div class="divider"></div>
+    <div class="section">
+        <a href="/auth/google" class="btn red darken-1">
+            <i class="fab fa-google left"></i> Log In With Google
+        </a>
+    </div>
+    <p class="sign-in-text">in order to get started</p>
+</div>
+
+<div>
+<h3 class="or">Or</h3>
+
+<div class="login">
+    <form action="auth/login" method="post" >
+        <h2 class="log-title">Login <small>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;enter your credentials</small></h2>
+        <p>
+            <label for="email">Email: </label>
+            <input class="email" type="text" name="email" />
+        </p>
+        <p>
+            <label for="password">Password: </label>
+            <input type="password" name="password" />
+        </p>
+
+        <p>
+            <input type="submit" id="submit" value="Login" name = "submit" />
+        </p>
+
+    </form>
+
+    <a href="/register" class="btn black darken-1">Register an Account</a>
+
+</div> <!--end login-->
+</div>
+
+<div class="login-box">
+    <img class="img-logo" src="/images/github.png" />
+    <h3><i class="fas fa-trophy"></i> GoalCreations</h3>
+    <div class="section">
+        <p class="lead">Newcomer 👋 or Member 🖖<br/><span class ="vc">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; For entry into your<br/>🎇 <u>Victorious Creations</u></span> 🎇</p>
+    </div>
+    <div class="divider"></div>
+    <div class="section">
+        <a href="/auth/github" class="btn github-login darken-1">
+            <i class="fab fa-github left"></i> Sign In With GitHub
+        </a>
+    </div>
+    <p class="sign-in-text">in order to get started</p>
+</div>

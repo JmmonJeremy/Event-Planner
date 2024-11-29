@@ -1,0 +1,699 @@
+body {
+  background: rgb(101, 177, 198);
+}
+
+p {
+  margin-top: 0;
+}
+
+/* p { //google-auth-builtin style
+  margin: 10px 0 !important;
+} */
+
+.back-btn {
+  position: fixed;
+  top: 125px;   /* Adjust this value as needed */
+  left: 100px; /* Adjust this value as needed */ 
+}
+
+h3.welcome {
+  margin: 0 0 10px 0;
+}
+
+h5.logout {
+  position: fixed;      /* Position relative to the nearest positioned ancestor */
+  bottom: 20px;               /* Space it below header */
+  left: 20px;               /* Horizontally center */
+  transform: rotate(45deg);  /* Rotate the text by 90 degrees */ 
+  display: flex !important;         /* Use flexbox for centering */
+  flex-direction: column !important;/* Stack items vertically */
+  align-items: center;   /* Center the items horizontally */ 
+  color: blue !important; 
+}
+
+i.log-icon {
+  margin-top: 10px;
+}
+
+a.pg-link {
+  position: fixed;      /* Position relative to the nearest positioned ancestor */
+  top: 150px;               /* Space it below header */
+  right: 30px;               /* Horizontally center */
+  transform: rotate(45deg);  /* Rotate the text by 90 degrees */ 
+  text-decoration: underline;  
+  text-underline-offset: 5px; /* Controls the space between the text and the underline */
+}
+
+.pg-link,
+h5.pg-header,
+h6.mini-header,
+label {
+  color: yellow !important;
+}
+
+thead.btm-bdr-yellow,
+td.btm-bdr-yellow {
+  border-bottom: 2px solid yellow;
+}
+
+a.goal-link {
+  color: blue;
+  font-weight: bold;
+}
+
+table.lg-view {
+  font-size: 1.5rem;
+}
+
+table.sm-view {
+  font-size: 0.75rem;
+  padding: 0 !important;
+  margin: 0 !important;
+  line-height: 0;
+}
+
+input.search {  
+  background: linear-gradient(to right, black, rgb(101, 177, 198));
+  color: white; /* Ensures text is visible on dark background */
+  border-radius: 10px !important; /* Optional: Adds rounded corners */
+  padding: 5px; /* Optional: Adds padding inside the input */
+  border: none; /* Optional: Removes border for a cleaner look */
+  /* Add white glow to the bottom edge only */
+  box-shadow: 0 4px 10px rgba(255, 255, 255, 0.8) !important;  /* Bottom edge glow */
+}
+
+button.search {
+  margin-left: 2.5rem !important; 
+  box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.8); /* White glow */
+ 
+  text-shadow: 
+  -1px -1px 0 #FFFF00,  /* Top-left shadow */
+  1px -1px 0 #FFFF00,   /* Top-right shadow */
+  -1px 1px 0 #FFFF00,   /* Bottom-left shadow */
+  1px 1px 0 #FFFF00;    /* Bottom-right shadow */
+  letter-spacing: 5px; /* Adjust the value to control the space */
+}
+
+div.padding {
+  width: 1px;
+}
+
+/* Right-align the inputs */
+.right-aligned-inputs {
+  display: flex;
+  align-items: center;
+  gap: 100px; /* Adjusts spacing between inputs */
+  margin-left: auto; /* Pushes this container to the right */
+  margin-right: 10px;  
+}
+
+/* Make the row a flex container */
+.optional-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Pushes items to edges */ 
+  margin-bottom: -30px;
+  flex-direction: wrap; 
+}
+
+h4.optional-label {
+  color: yellow;
+  border-bottom: 3px solid yellow; /* Sets the yellow line under the h4 */
+  padding-bottom: 5px; /* Adds space between the text and the line */ 
+  margin-bottom: 50px; 
+}
+
+/* Manage label font size */
+span.guidance,
+.input-field label {
+  font-size: 18px !important; /* Adjust to your preferred size */
+  color: blue;
+}
+
+div.public-card {
+  border-radius: 2rem !important;
+  margin-bottom: 2rem; 
+}
+
+div.public-card-btm {
+  border-radius: 0 0 2rem 2rem !important;
+}
+
+.c-num input {
+  width: 85px !important;
+  margin-left: 150px !important;  
+}
+
+.c-num label[for="creationNumber"].active,
+.c-num label {
+  top: 20%; /* Center vertically within the select box */
+}
+
+.date-row {
+  display: flex; 
+  align-items: center;
+  white-space: nowrap; /* Prevent wrapping */
+}
+
+.date-input-field {
+  margin: 0;
+}
+
+.date-input-field select, 
+.date-input-field input {  
+  display: inline-block; 
+  width: 85px !important; /* Set the width of the dropdown container & imput box */   
+}
+
+/* Styling the dropdown select input field */
+.date-input-field select {
+  appearance: none;            /* Hides the default arrow */
+  -webkit-appearance: none;    /* Hides the default arrow on webkit browsers */
+  background-color: rgb(101, 177, 198); /* Set custom background color */
+  border: none; /* Remove default border */
+  border-bottom: 2px solid blue; /* Add custom blue bottom border */
+  color: white; /* Text color */  
+}
+
+.date-input-field select:focus {
+  outline: none; /* Ensures no outline when the select box is focused */ 
+}
+
+/* Add custom arrow icon */
+.date-input-field {
+  position: relative; /* Custom arrow symbol */
+}
+
+.date-input-field::after {
+  content: '▼'; /* Custom arrow symbol */
+  font-size: 16px;
+  color: blue; /* Custom arrow color */
+  position: absolute; /* To position custom arrow */
+  right: 10px; /* To position custom arrow */
+  top: 50%; /* Center vertically within the select box */
+  transform: translateY(-50%); /* Adjust for exact vertical centering */
+  pointer-events: none; /* Keeps arrow non-clickable */
+}
+
+.date-input-field label {
+  padding-right: 5px; /* Adds some spacing beside the label */
+  font-size: 18px; /* Adjust to your preferred size */
+}
+
+.slash {
+  padding: 0 15px 0 5px;
+  font-weight: bold;
+}
+
+/* Prevent Materialize's focus effect from transforming the label */
+.c-num label[for="creationNumber"],
+.c-num label[for="creationNumber"].active,
+.input-field label[for="year"],
+.input-field label[for="year"].active {
+  transform: none !important; /* Stops the font from changing size */
+}
+
+/* Keep label to the left of the Year input */
+.year label {   
+  top: 27%; /* Center the label vertically */ 
+}
+
+/* Adjust Year input field */
+.year input#year {
+  margin-left: 50px; /* Add padding to account for the label on the left */
+  padding-top: 10px
+}
+
+/* Adjust end symbol: | for optional inputs */
+h4.optional-end {
+  color: yellow;
+  padding-bottom: 5px; /* Adds space between the text and the line */ 
+  margin-bottom: 50px; 
+}
+
+h4.required-input::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%; /* Matches the width of the text */
+  height: 5px;
+  border-top: 3px solid red; /* Red line above text */
+  box-shadow: 0 2px 8px #fff; /* White glow around the line */  
+}
+
+h4.required-input {
+  color: red;
+  text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #fff;
+  margin-left: -15px;
+  display: inline-block; /* Make the top line take only the width of h2 content */
+  padding-top: 10px; /* Adds space for the top line */
+  position: relative; /* necessary for placement of top line */
+}
+
+h4.access-denied-message {
+  position: absolute;   /* Position the message outside the normal document flow */
+  top: 120px;               /* Align it at the top of the page */
+  left: 50%;            /* Center horizontally */
+  transform: translateX(-50%);  /* Fine-tune centering */  
+  font-weight: bold;    /* Bold font */
+  padding: 10px;        /* Optional padding around the message */
+}
+
+div.created {
+  position: relative;
+  width: 100%; /* Make sure it covers the screen width */
+  clear: both; /* Ensures floating works correctly */
+}
+
+.flag {
+  color: red;
+  text-shadow:
+  0px 0px 5px rgba(255, 255, 255, 0.8),  /* Smaller inner shadow */
+  0px 0px 10px rgba(255, 255, 255, 0.6), /* Medium shadow */
+  0px 0px 15px rgba(255, 255, 255, 0.4), /* Larger shadow */
+  0px 0px 20px rgba(255, 255, 255, 0.2); /* Largest shadow */
+  z-index: 1000;        /* Ensure it stays on top */
+}
+
+.indent {
+  padding-left: 0.85rem; /* Used to align Creation Number in Edit page*/
+}
+
+.input-group{  /*google-auth-builtin style */
+  display:table;
+  width:100%;
+}
+.input-group .unclosed-field,
+.input-group .input-group-addon{  /*google-auth-builtin style */
+  display:table-cell;
+}
+
+.search-form {  /* google-auth-builtin style */
+  margin: 70px 0;
+}
+
+/* Text color when input is focused */
+.input-field input[type="text"]:focus,
+.input-field input[type="number"]:focus {  
+  color: white;
+}
+
+/* Underline color when input is not focused */
+.input-field input[type="text"]:not(:focus),
+.input-field input[type="number"]:not(:focus) {
+  border-bottom: 1px solid blue !important;  /* Change the default color */
+  box-shadow: 0 1px 0 0 blue !important;
+  color: white;
+}
+
+/* Unfocused border color for textarea */
+.input-field textarea:not(:focus) {
+  border: 2px solid blue;
+  box-shadow: none; 
+  color: white; 
+}
+
+/* Reset to Materialize's default focus color */
+.input-field textarea:focus {
+  border: 5px solid #26a69a !important; /* Materialize default teal color */
+  box-shadow: 0 5px 0 0 #26a69a !important; /* Match the color for the shadow */
+  color: white;
+}
+
+/* Add a custom blue arrow using a pseudo-element for Status*/
+.blue-arrow:after {
+  content: '▼'; /* Unicode for downward arrow */
+  color: blue; /* Arrow color */
+  position: absolute;
+  right: 6.5px; /* Align arrow inside the select box */
+  top: 14px; /* Vertically center the arrow */
+  pointer-events: none; /* Arrow not clickable */
+  font-size: 16px;
+}
+
+
+
+.or {
+  text-align: center;
+  /* margin: auto 0; */
+  /* padding-top: 210px; */
+  padding-top: 275px;
+  color:gold;
+}
+
+.title {
+  position: fixed;
+  top: 0;
+  margin-top: 70px;
+  font-size: 40px;
+  text-align: center;
+  color: white;
+  width: 100%;
+}
+
+.lead {
+  font-weight: bold;
+  font-family: 'Arvo', serif;
+  font-size: 26px;  
+  line-height: 40px;
+}
+
+.vc {
+  padding-top: 15px !important;
+  display: inline-block;
+}
+
+.insert-content {
+  display: flex;
+  justify-content: space-around;  
+}
+
+.login-box { 
+  border-radius: 40px;
+  height: fit-content;
+  width: 380px;  
+  margin-top: 250px;
+  text-align: center; 
+  background-color:aliceblue;  
+}
+
+.github-login {
+  background: rgb(71, 43, 186);
+  background: linear-gradient(0deg, rgba(71, 43, 186, 1) 0%, rgba(44, 25, 121, 1) 100%);
+}
+
+/* added to put edit & delete buttons side by side */
+.btn-float {   /* google-auth-builtin style */
+  /*float: left;   didn't work replaced with .inline-form below */
+  margin-right: 10px; 
+}
+
+/* added to put edit & delete buttons side by side */
+.inline-form {
+  display: inline;
+}
+
+.btn {
+  border-radius: 20px;
+}
+
+.img-logo { 
+  width: 160px;
+  height: 160px;
+}
+
+.img-small {  /* google-auth-builtin style */
+  width: 180px;
+}
+
+.fa-large {  /* google-auth-builtin style */
+  font-size: 26px !important;
+}
+
+.fa-small {   /* google-auth-builtin style */
+  font-size: 16px !important;
+}
+
+/* .login-container {  //google-auth-builtin style
+  width: 400px;
+  margin-top: 50px;
+  text-align: center;
+} */
+
+.show-content {
+  position: relative;
+}
+
+.edit-icon-wrapper {
+  position: absolute; 
+  right: 370px; /* Adjust as needed */
+}
+
+/* CKEDITOR STYLING *********************************************************************************/
+
+/* CKEditor specific content styling */
+.ckeditor-body {
+  background-color: rgb(101, 177, 198);
+  color: #fff;
+}
+
+/* Optionally add CSS for blue border */
+.editor-blue-border {
+  border: 3px solid blue!important; /* Using !important to ensure it overrides existing styles */
+}
+
+/* Change the background of the toolbar to blue */
+.cke_top {
+  background-color: blue !important;
+}
+
+/* Center toolbar icons horizontally in CKEditor */
+.cke_top, .cke_toolbox {
+  display: flex !important;
+  justify-content: center !important;
+  flex-wrap: wrap !important; /* To have dropdown menus wrap to 2nd line */
+}
+
+.cke_toolgroup {
+  display: inline-flex !important; /* Keep each tool group in a single line */
+}
+
+
+/* Change the button (tool) icons in the toolbar to white */
+/* .cke_button_icon { */
+/*    filter: invert(1) !important;*/ /* This inverts the colors, making white icons */
+/* } */
+
+.cke_button {
+  background-color: yellow !important; /* Sets a solid background for buttons */          
+}
+
+/* Force black text for all CKEditor dialog labels and fields */
+.cke_dialog_ui_input_text,
+.cke_dialog_ui_input_select,
+.cke_dialog_ui_labeled_label,
+.cke_dialog_ui_input_textarea {
+  color: black !important;
+}
+
+/* Force white text for all CKEditor dropdown heading */
+.cke_combo__styles .cke_combo_text,
+.cke_combo__format .cke_combo_text,
+.cke_combo__font .cke_combo_text,
+.cke_combo__fontsize .cke_combo_text {
+  color: white !important;
+}
+
+/* Put a white down arrow behind the small black one in CKEditor dropdown heading */
+.cke_combo_button {           
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M7 10l5 5 5-5z"/></svg>') !important;
+  background-position: calc(100% + 2px) center !important;
+  background-repeat: no-repeat !important;
+  background-size: 30px 30px !important;
+}
+
+/* Black arrow when hovered over or open */
+.cke_combo_button:hover,
+.cke_combo_button[aria-expanded="true"] {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="black"><path d="M7 10l5 5 5-5z"/></svg>') !important;
+}
+
+/* CSS for styling when dropdown title is being hovered over & open*/
+.cke_combo_button:hover, 
+.cke_combo_button[aria-expanded="true"],          
+.cke_combo_button:hover .cke_combo_text, 
+.cke_combo_button[aria-expanded="true"] .cke_combo_text {
+  background-color: yellow !important; /* Changes the background color */
+  color: black !important; /* Changes the text color to black */
+} 
+
+/* NAME/PASSWORD STYLING *********************************************************************************/
+div.login a {
+  margin-top: 2rem;
+  box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.8); /* White glow */
+}
+
+div.login {
+  text-align: center;
+  background: url(/images/red-blue-gradient.png) no-repeat center center !important;
+  background-size: cover; /* Ensures the image covers the area */
+  border: 10px solid #CFCFCF;  
+  height: 225px;
+  width: 420px;
+  margin: 3rem;
+  border-radius: 30px 0 0 0; /* Top-right corner rounded */
+  -mozborder-radius-bottomright: 30px;
+  -webkit-border-bottom-right-radius: 30px;
+  _height: 100%;
+  box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.8); /* White glow */  
+}
+
+div.register {
+  margin-top: 200px;
+  height: 380px;
+  width: 615px; 
+}
+
+div.login h2.log-title { 
+  _padding-left: 38px;
+  margin-top: -25px;
+  font-size: 45px;
+  background: black url('/images/wood-background.png') no-repeat;
+  color: #2F2F2F;
+  border-top: 1px solid #9F9F9F;
+  /* text-indent: -9999px; */
+  width: 400px;
+  height: 70px;
+  position: relative;
+  left: -23px;
+  border-radius: 60px 0 20px 0; /* Top-right corner rounded */
+}
+
+div.register h2.register-title {
+  font-size: 39px;
+  font-weight: bold;
+  color:rgb(46, 23, 220);
+  text-shadow: 0 0 5px yellow, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #fff;
+  background: url('/images/wood-background.png') no-repeat,
+    linear-gradient(to right, rgb(30, 2, 58), rgb(201, 82, 154));
+  border-top: 10px solid rgb(30, 2, 58);
+  border-right: 10px solid rgb(30, 2, 58);
+  left: -120px;
+  padding-left: 2.5rem;
+  text-align: left;
+  width: 140%; 
+  border-radius: 60px 0 60px 0; /* Top-right corner rounded */ 
+}
+
+div.login label {
+  font-size: 24px;
+  color: black !important;
+  text-shadow: 0 0 5px yellow, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #fff;
+}
+
+div.register label {
+  display: inline !important;
+  
+}
+div.login input {
+  width: 40% !important;
+  height: 30px !important;
+  position: relative !important;
+  top: -4px !important;
+  font-size: 20px !important;
+  padding: 0 .3em !important;
+  color: white !important;
+}
+
+div.login input.email[name="email"] {
+  font-size: 14px !important;
+}
+
+/* Ensures font size remains consistent on focus */
+div.login input.email[name="email"]:focus {
+  font-size: 14px !important; /* Ensure font size is the same on focus */ 
+  width: 60% !important; 
+}
+
+/* Ensures font size remains consistent after losing focus */
+div.login input.email[name="email"]:not(:focus) {
+  font-size: 14px !important;   
+}
+
+div.register div.input-container {
+  width: 92%;
+  margin-top: -55px;
+}
+
+div.register input {
+  width: 100% !important;  
+}
+
+div.register p {
+  width: 100%;
+  text-align: left;
+  padding-left: 2rem; 
+  margin-right: 2rem;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+div.register hr { 
+  height: 1.5px;
+  background-color: whitesmoke;
+  box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.8); /* White glow */
+}
+
+div.register hr.btm-line {
+  height: 2px;
+  margin-top: -10px; 
+  margin-bottom: 40px;
+}
+
+div.register p.register-agree {
+  color: white;
+}
+
+div.login input#submit {
+  width: 15% !important;
+  font-size: 14px !important;
+  color: black !important;
+}
+
+div.register button.registerbtn {
+  margin: 5px 0 0 95%;
+}
+
+div.register p.registered {
+  color: white;
+  margin: -10px 0 0 -100px;
+}
+
+div.login small {
+  font-size: 16px;
+  color: white;
+  position: relative;
+  top: -4px;
+  left: 25px;
+}
+
+div.register small {
+  font-weight: bold;
+  /* color:rgb(68, 161, 208); */
+  top: -65px;
+}
+
+div.login h4 {
+  color: #5F5F5F;
+  font-size: 23px;
+}
+
+div.login h4.alert {
+  background-Color: #bfbfbf;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  padding: .4em;
+  border: 1px dotted white;
+  font-size: 19px;
+  line-height: 19px;
+  position: relative;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+}
+
+div.login span.exit {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: #6361DF;
+  color: #292929;
+  font-size: 10px;
+  line-height: 14px;
+  font-weight: bold;
+  padding: 0 .3em;
+  cursor: pointer;
+  border-left: 1px dotted white;
+  border-bottom: 1px dotted white;
+}

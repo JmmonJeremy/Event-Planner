@@ -1,0 +1,221 @@
+{{!--  // google auth  --}}
+<h3>Create: Focused & Fueled Goal</h3>
+<div class="row">
+    <form action="/creationGoals" method="POST" class="col s12" id="goalCreationForm">
+        <div class="row optional-row">
+            <h4 class="optional-label">Optional Input <span class="guidance">(Will autofill if left blank)</span> &#x21C9;</h4>
+
+            <!-- New container for right-aligned inputs -->
+            <div class="right-aligned-inputs">
+                <div class="row">
+                    <div class="input-field c-num">
+                        <input type="number" id="creationNumber" name="creationNumber" min="1">
+                        <label for="creationNumber">Creation Number</label>
+                    </div>
+                </div>
+            
+                <div class="row date-row">
+                    <div class="date-input-field">
+                        <label for="month">Date</label>
+                        <select id="month" name="creationDate[month]">
+                            <option value="" disabled selected>Month</option>
+                            <!-- Month options (1-12) -->
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                        </select>
+                    </div>
+
+                    <span class="slash">/</span>
+
+                    <div class="date-input-field">
+                        {{!-- <label for="day">Day</label> --}}
+                        <select id="day" name="creationDate[day]">
+                            <option value="" disabled selected>Day</option>
+                            <!-- Day options (1-30) -->
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                        <option value="11">11</option>
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                        <option value="16">16</option>
+                        <option value="17">17</option>
+                        <option value="18">18</option>
+                        <option value="19">19</option>
+                        <option value="20">20</option>
+                        <option value="21">21</option>
+                        <option value="22">22</option>
+                        <option value="23">23</option>
+                        <option value="24">24</option>
+                        <option value="25">25</option>
+                        <option value="26">26</option>
+                        <option value="27">27</option>
+                        <option value="28">28</option>
+                        <option value="29">29</option>
+                        <option value="30">30</option>
+                        <option value="30">31</option>
+                        </select>
+                    </div>
+
+                    <span class="slash">/</span>
+
+                    <div class="input-field date-input-field year">
+                        <label for="year">Year</label>
+                        <input type="text" id="year" name="creationDate[year]" value="{{getYear}}">
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="optional-end">|</h4>
+        </div>
+
+        <h4 class="required-input">&#x21CA; Required</h4>
+
+        <div class="row">
+            <div class="input-field">
+                <input type="text" id="goal" name="goal">
+                <label for="goal">
+                    Goal &nbsp;&nbsp;&nbsp;
+                    <span class="guidance">(What you want to accomplish)</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="input-field">
+                <input type="text" id="motivator" name="motivator">
+                <label for="motivator">
+                    Motivator &nbsp;&nbsp;&nbsp;
+                    <span class="guidance">(Outside influence motivating you to accomplish goal)</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="input-field">
+                <input type="text" id="desire" name="desire">
+                <label for="desire">
+                    Desire &nbsp;&nbsp;&nbsp;
+                    <span class="guidance">(Desired result from accomplishing goal)</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="input-field">
+                <input type="text" id="belief" name="belief">
+                <label for="belief">
+                    Belief &nbsp;&nbsp;&nbsp;
+                    <span class="guidance">(Positive personal result goal will bring)</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="input-field">
+                <input type="text" id="knowledge" name="knowledge">
+                <label for="knowledge">
+                    Knowledge &nbsp;&nbsp;&nbsp;
+                    <span class="guidance">(A promised result of accomplishing goal)</span>
+                </label>
+            </div>
+        </div>    
+
+         {{!-- <div class="row">
+            <div class="input-field">
+                <input type="text" id="plan" name="plan">
+                <label for="plan">
+                    Plan &nbsp;&nbsp;&nbsp;
+                    <span class="guidance">(A promised result of accomplishing goal)</span>
+                </label>
+            </div>
+        </div>    --}}
+        
+        <div class="row">
+            <div class="input-field">
+                <h6 class="mini-header">
+                    Plan &nbsp;&nbsp;&nbsp;
+                    <span class="guidance">(Planned steps needed to accomplish goal)</span>
+                </h6>
+                <textarea id="plan" name="plan"></textarea>
+            </div>
+        </div>
+
+        {{!-- <div class="row">
+            <div class="input-field">
+                <input type="text" id="action" name="action">
+                <label for="action">
+                    Action &nbsp;&nbsp;&nbsp;
+                    <span class="guidance">(A promised result of accomplishing goal)</span>
+                </label>
+            </div>
+        </div>  --}}
+
+        <div class="row">
+            <div class="input-field">
+                <h6 class="mini-header">
+                    Action &nbsp;&nbsp;&nbsp;
+                    <span class="guidance">(Steps taken to accomplish goal)</span>
+                </h6>
+                <textarea id="action" name="action">Followed goal creation approach and wrote goal, reasons for accomplishing it, and plan for how to do it.</textarea>
+            </div>
+        </div>
+
+        {{!-- <div class="row">
+            <div class="input-field">
+                <input type="text" id="victory" name="victory">
+                <label for="victory">
+                    Victory &nbsp;&nbsp;&nbsp;
+                    <span class="guidance">(A promised result of accomplishing goal)</span>
+                </label>
+            </div>
+        </div>   --}}
+
+        <div class="row">
+            <div class="input-field">
+                <h6 class="mini-header">
+                    Victory &nbsp;&nbsp;&nbsp;
+                    <span class="guidance">(Good things that have happened while striving for goal)</span>
+                </h6>
+                <textarea id="victory" name="victory">Thought about and recorded what I wanted to accomplish, reasons for accomplishing it, and how to do it.</textarea>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="input-field blue-arrow">
+                <select id="status" name="status">
+                    <option value="Private" selected>Private</option>
+                    <option value="Public">Public</option>
+                </select>
+                <label for="status">
+                    Status &nbsp;&nbsp;&nbsp;
+                    <span class="guidance">(Keep goal creation private or open for others to see)</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="row">
+            <input type="submit" value="Save" class="btn">
+            <a href="/dashboard" class="btn orange">Cancel</a>
+        </div>
+    </form>
+</div>

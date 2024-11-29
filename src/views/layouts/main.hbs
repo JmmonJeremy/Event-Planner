@@ -1,0 +1,35 @@
+{{!--  // google auth  --}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {{!-- https://materializecss.com/getting-started.html CDN Compiled & minified CSS --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    {{!-- https://cdnjs.com/libraries/font-awesome under styles top line all version --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />   
+    <link rel="stylesheet" href="/css/google-auth-style.css">
+    <title>GoalCreations</title>
+</head>
+
+<body>    
+    {{> _header}}
+    {{> _add_btn}}
+    {{> _back_btn}}  
+    <div class="container">
+        {{{body}}}
+    </div>
+
+    {{!-- from: https://materializecss.com/getting-started.html CDN Compiled & minified JavaScript --}}          
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>   
+    {{!-- from: https://cdnjs.com/libraries/ckeditor/4.22.1 4.22.1 is the newest version up to 4.9.2 that worked --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.22.1/ckeditor.js" integrity="sha512-F8fV4+wpHYl9zul08Soff9H9fCx6OMIFfgbQcy+2v2gV7PdbT0OgM1LFwujQmwlLGWWKNbOFZ13uWP+Cbe0Ngw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="/js/google-auth-main.js"></script>   
+
+    {{!-- <script>
+        M.Sidenav.init(document.querySelector('.sidenav'))
+        M.FormSelect.init(document.querySelector('#status'))
+    </script> --}}
+</body>
+
+</html>
