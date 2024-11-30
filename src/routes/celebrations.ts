@@ -2,28 +2,28 @@ import { Router } from 'express';
 
 const celebrationRoutes = Router();
 
-celebrationRoutes.post('/holidays', (req, res) => {
-    res.send('Create a new holiday');
+celebrationRoutes.post('/celebrations', (req, res) => {
+    res.send('Create a new celebration');
 });
 
-celebrationRoutes.post('/holidays/createWithArray', (req, res) => {
-    res.send('Create multiple holidays');
+celebrationRoutes.post('/celebrations/createWithArray', (req, res) => {
+    res.send('Create multiple celebrations');
 });
 
-celebrationRoutes.get('/holidays/:holidayId', (req, res) => {
-    res.send(`Get holiday with ID ${req.params.holidayId}`);
+celebrationRoutes.get('/celebrations/:celebrationId', (req, res) => {
+    res.send(`Get celebration with ID ${req.params.celebrationId}`);
 });
 
-celebrationRoutes.get('/holidays/user/:userId', (req, res) => {
-    res.send(`Get holidays for user ${req.params.userId}`);
+celebrationRoutes.get('/celebrations/user/:userId', (req, res) => {
+    res.send(`Get celebrations for user ${req.params.userId}`);
 });
 
-celebrationRoutes.put('/holidays/:holidayId', (req, res) => {
-    res.send(`Update holiday with ID ${req.params.holidayId}`);
+celebrationRoutes.put('/celebrations/:celebrationId', (req, res) => {
+    res.send(`Update celebration with ID ${req.params.celebrationId}`);
 });
 
-celebrationRoutes.delete('/holidays/:holidayId', (req, res) => {
-    res.send(`Delete holiday with ID ${req.params.holidayId}`);
+celebrationRoutes.delete('/celebrations/:celebrationId', (req, res) => {
+    res.send(`Delete celebration with ID ${req.params.celebrationId}`);
 });
 
 export default celebrationRoutes;
