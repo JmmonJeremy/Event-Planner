@@ -5,10 +5,10 @@
     "description": "Calendar API",
     "version": "1.0.0"
   },
-  "host": "localhost:3000",
+  "host": "event-planner-nkma.onrender.com",
   "basePath": "/",
   "schemes": [
-    "http"
+    "https"
   ],
   "paths": {
     "/users": {
@@ -56,23 +56,62 @@
         }
       },
       "put": {
-        "description": "",
+        "summary": "UPDATES a user that has been selected by _id with any new data entered",
+        "description": "The changed data for the user updates the database",
         "parameters": [
           {
             "name": "userId",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "description": "Unique identifier for the user"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Fields to update",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "Updated Name"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "Updated@email"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "password123"
+                }
+              },
+              "required": "email"
+            }
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
+          "204": {
+            "description": "SUCCESS (with no content returned), PUT   the selected user in the database"
+          },
+          "400": {
+            "description": "BAD REQUEST your PUT was attempted with forbidden entries"
+          },
+          "404": {
+            "description": "The attempted PUT of the specified user for updating was Not Found"
+          },
+          "412": {
+            "description": "The PRECONDITION FAILED in the validation of the user data"
+          },
+          "500": {
+            "description": "There was an INTERNAL SERVER ERROR while trying to PUT the data change"
           }
         }
       },
       "delete": {
-        "description": "",
+        "summary": "DELETES a user by its _id",
+        "description": "With deletion it",
         "parameters": [
           {
             "name": "userId",
@@ -83,7 +122,16 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "SUCCESS, the user was DELETED"
+          },
+          "404": {
+            "description": "The selected user for DELETION was NOT FOUND"
+          },
+          "412": {
+            "description": "The PRECONDITION FAILED in the validation of the _id PARAMETER"
+          },
+          "500": {
+            "description": "There was an INTERNAL SERVER ERROR while trying to DELETE the user"
           }
         }
       }

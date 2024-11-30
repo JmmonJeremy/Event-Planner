@@ -37,13 +37,11 @@ userRoutes.get('/user/:userId', userController.findOne);
 // #1 the "Post" ROUTE for a new USER
 userRoutes.post('/user', userController.create);
 
-userRoutes.put('/user/:userId', (req, res) => {
-    res.send(`Update user with ID ${req.params.userId}`);
-});
+// #2 the "Put" ROUTE for updating a USER selected by userId
+userRoutes.put('/user/:userId', userController.update);
 
-userRoutes.delete('/user/:userId', (req, res) => {
-  res.send(`Delete user with ID ${req.params.userId}`);
-});
+// The "Delete" ROUTE for removing a USER selected by userId
+userRoutes.delete('/user/:userId', userController.deleteUser);
 // END Basic CRUD Operation Routes ########################################################################################/
 
 export default userRoutes;
