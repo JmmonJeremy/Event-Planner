@@ -11,6 +11,131 @@
     "http"
   ],
   "paths": {
+    "/users": {
+      "get": {
+        "summary": "GETS all the users",
+        "description": "All users are displayed.",
+        "responses": {
+          "200": {
+            "description": "SUCCESS, GET retrieved all users"
+          },
+          "404": {
+            "description": "The attempted GET of all users was Not Found"
+          },
+          "500": {
+            "description": "There was an INTERNAL SERVER ERROR while trying to GET all users"
+          }
+        }
+      }
+    },
+    "/user/{userId}": {
+      "get": {
+        "summary": "GETS a user by their _id",
+        "description": "The selected user is displayed.",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "SUCCESS, GET Retrieved the selected user"
+          },
+          "404": {
+            "description": "The attempted GET of the selected user was Not Found"
+          },
+          "412": {
+            "description": "The PRECONDITION FAILED in the validation of the _id PARAMETER"
+          },
+          "500": {
+            "description": "There was an INTERNAL SERVER ERROR while trying to GET the selected user"
+          }
+        }
+      },
+      "put": {
+        "summary": "UPDATES a user that has been selected by _id with any new data entered",
+        "description": "The changed data for the user updates the database",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Unique identifier for the user"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Fields to update",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "Updated Name"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "Updated@email"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "password123"
+                }
+              },
+              "required": "email"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "SUCCESS (with no content returned), PUT   the selected user in the database"
+          },
+          "400": {
+            "description": "BAD REQUEST your PUT was attempted with forbidden entries"
+          },
+          "404": {
+            "description": "The attempted PUT of the specified user for updating was Not Found"
+          },
+          "412": {
+            "description": "The PRECONDITION FAILED in the validation of the user data"
+          },
+          "500": {
+            "description": "There was an INTERNAL SERVER ERROR while trying to PUT the data change"
+          }
+        }
+      },
+      "delete": {
+        "summary": "DELETES a user by its _id",
+        "description": "With deletion it",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "SUCCESS, the user was DELETED"
+          },
+          "404": {
+            "description": "The selected user for DELETION was NOT FOUND"
+          },
+          "412": {
+            "description": "The PRECONDITION FAILED in the validation of the _id PARAMETER"
+          },
+          "500": {
+            "description": "There was an INTERNAL SERVER ERROR while trying to DELETE the user"
+          }
+        }
+      }
+    },
     "/user": {
       "post": {
         "description": "",
@@ -40,86 +165,6 @@
           },
           "400": {
             "description": "Bad Request"
-          }
-        }
-      }
-    },
-    "/user/{userId}": {
-      "put": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      },
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      },
-      "delete": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "userId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/user/login": {
-      "get": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/user/logout": {
-      "get": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/user/findByGoogleId": {
-      "get": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
           }
         }
       }
@@ -416,7 +461,7 @@
         }
       }
     },
-    "/holidays": {
+    "/celebrations": {
       "post": {
         "description": "",
         "responses": {
@@ -426,7 +471,7 @@
         }
       }
     },
-    "/holidays/createWithArray": {
+    "/celebrations/createWithArray": {
       "post": {
         "description": "",
         "responses": {
@@ -436,12 +481,12 @@
         }
       }
     },
-    "/holidays/{holidayId}": {
+    "/celebrations/{celebrationId}": {
       "get": {
         "description": "",
         "parameters": [
           {
-            "name": "holidayId",
+            "name": "celebrationId",
             "in": "path",
             "required": true,
             "type": "string"
@@ -457,7 +502,7 @@
         "description": "",
         "parameters": [
           {
-            "name": "holidayId",
+            "name": "celebrationId",
             "in": "path",
             "required": true,
             "type": "string"
@@ -473,7 +518,7 @@
         "description": "",
         "parameters": [
           {
-            "name": "holidayId",
+            "name": "celebrationId",
             "in": "path",
             "required": true,
             "type": "string"
@@ -486,7 +531,7 @@
         }
       }
     },
-    "/holidays/user/{userId}": {
+    "/celebrations/user/{userId}": {
       "get": {
         "description": "",
         "parameters": [
