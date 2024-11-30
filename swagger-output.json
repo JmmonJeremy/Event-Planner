@@ -5,10 +5,10 @@
     "description": "Calendar API",
     "version": "1.0.0"
   },
-  "host": "localhost:3000",
+  "host": "event-planner-nkma.onrender.com",
   "basePath": "/",
   "schemes": [
-    "http"
+    "https"
   ],
   "paths": {
     "/users": {
@@ -165,6 +165,9 @@
           },
           "400": {
             "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -376,6 +379,18 @@
     "/classes": {
       "post": {
         "description": "",
+        "parameters": [
+          {
+            "name": "reqBody",
+            "in": "body",
+            "description": "request body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        ],
         "responses": {
           "201": {
             "description": "Created"
@@ -418,11 +433,21 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "reqBody",
+            "in": "body",
+            "description": "request body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {}
+            }
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
+          "204": {
+            "description": "No Content"
           }
         }
       },

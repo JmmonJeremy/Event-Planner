@@ -41,12 +41,12 @@ export const findAll = async (req: Request, res: Response): Promise<void> => {
 
 // #2 main "Get" method for getting 1 USER by userId
 export const findOne = async (req: Request, res: Response): Promise<void> => {
-  /* #swagger.summary = "GETS a user by their _id" */ 
-  /* #swagger.description = 'The selected user is displayed.' */ 
-  // #swagger.responses[200] = { description: 'SUCCESS, GET Retrieved the selected user' }
-  // #swagger.responses[404] = { description: 'The attempted GET of the selected user was Not Found'}
-  // #swagger.responses[412] = { description: 'The PRECONDITION FAILED in the validation of the _id PARAMETER'}
-  // #swagger.responses[500] = { description: 'There was an INTERNAL SERVER ERROR while trying to GET the selected user'}    
+/* #swagger.summary = "GETS a user by their _id" */ 
+/* #swagger.description = 'The selected user is displayed.' */ 
+// #swagger.responses[200] = { description: 'SUCCESS, GET Retrieved the selected user' }
+// #swagger.responses[404] = { description: 'The attempted GET of the selected user was Not Found'}
+// #swagger.responses[412] = { description: 'The PRECONDITION FAILED in the validation of the _id PARAMETER'}
+// #swagger.responses[500] = { description: 'There was an INTERNAL SERVER ERROR while trying to GET the selected user'}    
 const userId: string = req.params.userId;
 console.log(userId);
   try {
@@ -78,6 +78,12 @@ console.log(userId);
 
 /*** MAIN 3 alter data METHODS ********************************************************************************************/
 // #1 the "Post" METHOD for a new USER
+/* #swagger.summary = "POSTS input to create a new user" */ 
+/* #swagger.description = 'The entered user information is added to the database.' */ 
+// #swagger.responses[201] = { description: 'SUCCESS, POST created a new user' }
+// #swagger.responses[400] = { description: 'BAD REQUEST your POST was attempted with forbidden entries'}
+// #swagger.responses[412] = { description: 'The PRECONDITION FAILED in the validation of the user data'}
+// #swagger.responses[500] = { description: 'There was an INTERNAL SERVER ERROR while trying to POST the selected user'}  
 export const create = async (req: Request, res: Response) => { 
   const { name, email, password } = req.body;
   try {
@@ -97,7 +103,7 @@ export const create = async (req: Request, res: Response) => {
   } catch (error) {
     if (error instanceof Error) {
       // BACKEND Failure OUTPUT 
-      res.status(400).json({ message: error.message });
+      res.status(500).json({ message: error.message });
     } else {
       // BACKEND Failure OUTPUT 
       res.status(400).json({ message: 'An unknown error occurred' });
@@ -107,13 +113,13 @@ export const create = async (req: Request, res: Response) => {
 
 // #2 the "Put" METHOD for updating a USER selected by userId
 export const update = async (req: Request, res: Response): Promise<void> => {
-  /* #swagger.summary = "UPDATES a user that has been selected by _id with any new data entered" */   
-    /* #swagger.description = 'The changed data for the user updates the database' */      
-    // #swagger.responses[204] = { description: 'SUCCESS (with no content returned), PUT updated the selected user in the database' }
-    // #swagger.responses[400] = { description: 'BAD REQUEST your PUT was attempted with forbidden entries'}
-    // #swagger.responses[404] = { description: 'The attempted PUT of the specified user for updating was Not Found'}
-    // #swagger.responses[412] = { description: 'The PRECONDITION FAILED in the validation of the user data'}
-    // #swagger.responses[500] = { description: 'There was an INTERNAL SERVER ERROR while trying to PUT the data change'}  
+/* #swagger.summary = "UPDATES a user that has been selected by _id with any new data entered" */   
+/* #swagger.description = 'The changed data for the user updates the database' */      
+// #swagger.responses[204] = { description: 'SUCCESS (with no content returned), PUT updated the selected user in the database' }
+// #swagger.responses[400] = { description: 'BAD REQUEST your PUT was attempted with forbidden entries'}
+// #swagger.responses[404] = { description: 'The attempted PUT of the specified user for updating was Not Found'}
+// #swagger.responses[412] = { description: 'The PRECONDITION FAILED in the validation of the user data'}
+// #swagger.responses[500] = { description: 'There was an INTERNAL SERVER ERROR while trying to PUT the data change'}  
   if (!req.body) {
     // BACKEND Failure OUTPUT 
     res.status(400).send({
@@ -182,12 +188,12 @@ export const update = async (req: Request, res: Response): Promise<void> => {
 
 // The "Delete" METHOD for removing a USER selected by userId
 export const deleteUser = async (req: Request, res: Response): Promise<void> => {
-  /* #swagger.summary = "DELETES a user by its _id" */ 
-    /* #swagger.description = 'With deletion it's permanently removed from the database.' */
-    // #swagger.responses[200] = { description: 'SUCCESS, the user was DELETED' }   
-    // #swagger.responses[404] = { description: 'The selected user for DELETION was NOT FOUND'}
-    // #swagger.responses[412] = { description: 'The PRECONDITION FAILED in the validation of the _id PARAMETER'}
-    // #swagger.responses[500] = { description: 'There was an INTERNAL SERVER ERROR while trying to DELETE the user'} 
+/* #swagger.summary = "DELETES a user by its _id" */ 
+/* #swagger.description = 'With deletion it's permanently removed from the database.' */
+// #swagger.responses[200] = { description: 'SUCCESS, the user was DELETED' }   
+// #swagger.responses[404] = { description: 'The selected user for DELETION was NOT FOUND'}
+// #swagger.responses[412] = { description: 'The PRECONDITION FAILED in the validation of the _id PARAMETER'}
+// #swagger.responses[500] = { description: 'There was an INTERNAL SERVER ERROR while trying to DELETE the user'} 
   const userId: string = req.params.userId; 
   try {
     const data = await UserModel.findOneAndDelete({ _id: userId }) 
