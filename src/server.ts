@@ -69,7 +69,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   // from https://www.npmjs.com/package/connect-mongo
-  store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI }),
+  store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
   cookie: {   
     secure: process.env.NODE_ENV === 'production', // Ensure cookies are only sent over HTTPS in production
     httpOnly: true,  // Prevents access to the cookie via JavaScript (XSS protection)
