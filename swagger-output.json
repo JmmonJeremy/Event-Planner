@@ -11,41 +11,25 @@
     "http"
   ],
   "paths": {
-    "/user": {
-      "post": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "example": "any"
-                },
-                "email": {
-                  "example": "any"
-                },
-                "password": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
+    "/users": {
+      "get": {
+        "summary": "GETS all the users",
+        "description": "All users are displayed.",
         "responses": {
-          "201": {
-            "description": "Created"
+          "200": {
+            "description": "SUCCESS, GET retrieved all users"
           },
-          "400": {
-            "description": "Bad Request"
+          "404": {
+            "description": "The attempted GET of all users was Not Found"
+          },
+          "500": {
+            "description": "There was an INTERNAL SERVER ERROR while trying to GET all users"
           }
         }
       }
     },
     "/user/{userId}": {
-      "put": {
+      "get": {
         "description": "",
         "parameters": [
           {
@@ -61,7 +45,7 @@
           }
         }
       },
-      "get": {
+      "put": {
         "description": "",
         "parameters": [
           {
@@ -94,32 +78,35 @@
         }
       }
     },
-    "/user/login": {
-      "get": {
+    "/user": {
+      "post": {
         "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "example": "any"
+                },
+                "email": {
+                  "example": "any"
+                },
+                "password": {
+                  "example": "any"
+                }
+              }
+            }
           }
-        }
-      }
-    },
-    "/user/logout": {
-      "get": {
-        "description": "",
+        ],
         "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/user/findByGoogleId": {
-      "get": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
           }
         }
       }
@@ -370,7 +357,7 @@
         }
       }
     },
-    "/holidays": {
+    "/celebrations": {
       "post": {
         "description": "",
         "responses": {
@@ -380,7 +367,7 @@
         }
       }
     },
-    "/holidays/createWithArray": {
+    "/celebrations/createWithArray": {
       "post": {
         "description": "",
         "responses": {
@@ -390,12 +377,12 @@
         }
       }
     },
-    "/holidays/{holidayId}": {
+    "/celebrations/{celebrationId}": {
       "get": {
         "description": "",
         "parameters": [
           {
-            "name": "holidayId",
+            "name": "celebrationId",
             "in": "path",
             "required": true,
             "type": "string"
@@ -411,7 +398,7 @@
         "description": "",
         "parameters": [
           {
-            "name": "holidayId",
+            "name": "celebrationId",
             "in": "path",
             "required": true,
             "type": "string"
@@ -427,7 +414,7 @@
         "description": "",
         "parameters": [
           {
-            "name": "holidayId",
+            "name": "celebrationId",
             "in": "path",
             "required": true,
             "type": "string"
@@ -440,7 +427,7 @@
         }
       }
     },
-    "/holidays/user/{userId}": {
+    "/celebrations/user/{userId}": {
       "get": {
         "description": "",
         "parameters": [
