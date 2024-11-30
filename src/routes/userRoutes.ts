@@ -28,12 +28,10 @@ userRoutes.get('/user/findByGoogleId', (req, res) => {
 // START Basic CRUD Operation Routes ######################################################################################/
 /*** MAIN 2 types of GET METHODS ******************************************************************************************/
 // #1 main "Get" ROUTE for getting all USERS
-userRoutes.get('/users', userController.findAll)
+userRoutes.get('/users', userController.findAll);
 
-// #2 main "Get" ROUTE for getting 1 USER by id
-userRoutes.get('/user/:userId', (req, res) => {
-  res.send(`Get user with ID ${req.params.userId}`);
-});
+// #2 main "Get" ROUTE for getting 1 USER by userId
+userRoutes.get('/user/:userId', userController.findOne);
 
 /*** MAIN 3 alter data ROUTES ********************************************************************************************/
 // #1 the "Post" ROUTE for a new USER

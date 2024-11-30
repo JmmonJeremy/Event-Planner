@@ -30,7 +30,8 @@
     },
     "/user/{userId}": {
       "get": {
-        "description": "",
+        "summary": "GETS a user by their _id",
+        "description": "The selected user is displayed.",
         "parameters": [
           {
             "name": "userId",
@@ -41,7 +42,16 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "SUCCESS, GET Retrieved the selected user"
+          },
+          "404": {
+            "description": "The attempted GET of the selected user was Not Found"
+          },
+          "412": {
+            "description": "The PRECONDITION FAILED in the validation of the _id PARAMETER"
+          },
+          "500": {
+            "description": "There was an INTERNAL SERVER ERROR while trying to GET the selected user"
           }
         }
       },
