@@ -78,13 +78,13 @@ console.log(userId);
 
 /*** MAIN 3 alter data METHODS ********************************************************************************************/
 // #1 the "Post" METHOD for a new USER
+export const create = async (req: Request, res: Response) => { 
 /* #swagger.summary = "POSTS input to create a new user" */ 
 /* #swagger.description = 'The entered user information is added to the database.' */ 
 // #swagger.responses[201] = { description: 'SUCCESS, POST created a new user' }
 // #swagger.responses[400] = { description: 'BAD REQUEST your POST was attempted with forbidden entries'}
 // #swagger.responses[412] = { description: 'The PRECONDITION FAILED in the validation of the user data'}
 // #swagger.responses[500] = { description: 'There was an INTERNAL SERVER ERROR while trying to POST the selected user'}  
-export const create = async (req: Request, res: Response) => { 
   const { name, email, password } = req.body;
   try {
     const hashedPassword = await bcrypt.hash(password, 10);

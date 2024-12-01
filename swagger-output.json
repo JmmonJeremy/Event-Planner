@@ -138,7 +138,8 @@
     },
     "/user": {
       "post": {
-        "description": "",
+        "summary": "POSTS input to create a new user",
+        "description": "The entered user information is added to the database.",
         "parameters": [
           {
             "name": "body",
@@ -161,13 +162,16 @@
         ],
         "responses": {
           "201": {
-            "description": "Created"
+            "description": "SUCCESS, POST   a new user"
           },
           "400": {
-            "description": "Bad Request"
+            "description": "BAD REQUEST your POST was attempted with forbidden entries"
+          },
+          "412": {
+            "description": "The PRECONDITION FAILED in the validation of the user data"
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "There was an INTERNAL SERVER ERROR while trying to POST the selected user"
           }
         }
       }

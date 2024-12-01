@@ -4,11 +4,42 @@ import dotenv from "dotenv";
 import cors from "cors";
 import { connectDB } from "./config/database"; 
 import routes from "./routes"; 
+import { SwaggerOptions } from 'swagger-ui-express';
 import swaggerDocument from "../swagger-output.json"; // Path to the generated Swagger JSON file
 
 dotenv.config();
 
 const app: Express = express();
+
+const options: { swaggerOptions: SwaggerOptions } = {
+  swaggerOptions: {
+    operationsSorter: (a: any, b: any) => {
+      const customGroupOrder = ['users', 'events', 'celebrations', 'classes', 'goals'];
+      // Represent the URL paths of two API operations being compared.
+      const pathA = a.get('path');
+      const pathB = b.get('path');
+      // Represent the HTTP methods (GET, POST, etc.) for these operations.
+      const methodA = a.get('method');
+      const methodB = b.get('method');
+    
+      // Extract the first segment after the '/' (ie, users, events, celebrations, classes, goals)
+      const groupA = pathA.split('/')[1]?.toLowerCase() || ''; // Default to '' if no segment
+      const groupB = pathB.split('/')[1]?.toLowerCase() || ''; // Default to '' if no segment    
+    
+      // Custom group ordering
+      const orderA = customGroupOrder.indexOf(groupA);
+      const orderB = customGroupOrder.indexOf(groupB);
+
+      if (orderA !== orderB) {
+        return orderA - orderB;
+      }
+      // Sort by method order (GET, POST, PUT, DELETE)
+      const methodOrder = ['get', 'post', 'put', 'delete'];
+      // indexOf() finds the index of the method in methodOrde & Operations with the same HTTP method will remain in their original relative order
+      return methodOrder.indexOf(methodA) - methodOrder.indexOf(methodB);
+    } 
+  },
+};
 
 // Global Uncaught Exception Handler (This acts as a safety net for errors that occur outside of promise chains 
 // and are not caught anywhere in the code.) (Exceptions 1st because they are a more critical type of error)
@@ -40,7 +71,7 @@ app.use(express.json());
       res.send("Welcome to the API! Documentation available at /api-docs");
     });
     app.use("/", routes);
-    app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+    app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument, options));
 
     // Global error handler (Placing below routes ensures the error handler is the last middleware in the stack,
     // Placing before app.listen ensures server setup is completed & errors are handled properly.)
