@@ -14,7 +14,7 @@ const app: Express = express();
 const options: { swaggerOptions: SwaggerOptions } = {
   swaggerOptions: {
     operationsSorter: (a: any, b: any) => {
-      const customGroupOrder = ['users', 'events', 'celebrations', 'classes', 'goals'];
+      const customGroupOrder = ['users', 'user', 'events', 'celebrations', 'classes', 'goals'];
       // Represent the URL paths of two API operations being compared.
       const pathA = a.get('path');
       const pathB = b.get('path');
