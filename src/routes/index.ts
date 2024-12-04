@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import authRoutes from './authRoutes';
 import userRoutes from './userRoutes';
 import eventRoutes from './events';
 import goalRoutes from './goals';
@@ -7,6 +8,7 @@ import celebrationRoutes from './celebrations';
 
 const routes = Router();
 
+routes.use(authRoutes);
 routes.use(userRoutes);
 routes.use(eventRoutes);
 routes.use(goalRoutes);

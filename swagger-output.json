@@ -5,10 +5,10 @@
     "description": "Calendar API",
     "version": "1.0.0"
   },
-  "host": "event-planner-nkma.onrender.com",
+  "host": "localhost:3000",
   "basePath": "/",
   "schemes": [
-    "https"
+    "http"
   ],
   "paths": {
     "/users": {
