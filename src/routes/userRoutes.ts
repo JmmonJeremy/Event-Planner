@@ -40,7 +40,7 @@ userRoutes.post('/user', userController.create);
 // #2 the "Put" ROUTE for updating a USER selected by userId
 userRoutes.put('/user/:userId', userController.update);
 
-// The "Delete" ROUTE for removing a USER selected by userId
+// #3 the "Delete" ROUTE for removing a USER selected by userId
 userRoutes.delete('/user/:userId', userController.deleteUser);
 // END Basic CRUD Operation Routes ########################################################################################/
 

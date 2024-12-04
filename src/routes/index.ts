@@ -3,7 +3,7 @@ import userRoutes from './userRoutes';
 import eventRoutes from './events';
 import goalRoutes from './goals';
 import classRoutes from './classes';
-import celebrationRoutes from './celebrations';
+import celebrationRoutes from './celebrationRoutes';
 
 const routes = Router();
 
