@@ -1,4 +1,4 @@
-import { Request, Response, Router } from 'express';
+import {  Router, Request, Response, NextFunction } from 'express';
 import passport from 'passport';
 import jwt from 'jsonwebtoken';
 
@@ -12,15 +12,14 @@ interface User {
 }
 
 // Initiate Google OAuth
-authRoutes.get('auth/google', 
+authRoutes.get('/auth/google', 
   // #swagger.ignore = true
   passport.authenticate('google', { scope: ['profile', 'email'] }));
 
 // Handle Google OAuth callback
 authRoutes.get(
   // #swagger.ignore = true
-  'auth/google/callback',
-  passport.authenticate('google', { failureRedirect: '/' }),  
+  '/auth/google/callback', passport.authenticate('google', { failureRedirect: '/' }),  
   (req: Request, res: Response) => {
     // Type assertion to ensure req.user has the expected structure
     const user = req.user as User;

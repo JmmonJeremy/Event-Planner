@@ -1,5 +1,6 @@
 import { Request, Response, Router } from 'express';
 import * as userController from '../controllers/userControllers';
+import authenticateJWT from '../middleware/authMiddleware';
 
 const userRoutes = Router();
 
@@ -35,13 +36,13 @@ userRoutes.get('/user/:userId', userController.findOne);
 
 /*** MAIN 3 alter data ROUTES ********************************************************************************************/
 // #1 the "Post" ROUTE for a new USER
-userRoutes.post('/user', userController.create);
+userRoutes.post('/user', authenticateJWT, userController.create);
 
 // #2 the "Put" ROUTE for updating a USER selected by userId
-userRoutes.put('/user/:userId', userController.update);
+userRoutes.put('/user/:userId', authenticateJWT, userController.update);
 
 // The "Delete" ROUTE for removing a USER selected by userId
-userRoutes.delete('/user/:userId', userController.deleteUser);
+userRoutes.delete('/user/:userId', authenticateJWT, userController.deleteUser);
 // END Basic CRUD Operation Routes ########################################################################################/
 
 export default userRoutes;

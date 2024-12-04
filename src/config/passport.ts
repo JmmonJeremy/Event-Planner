@@ -2,6 +2,8 @@
 import passport from 'passport';
 import { Strategy as GoogleStrategy, Profile } from 'passport-google-oauth20';
 import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+dotenv.config();  // Load environment variables
 
 interface User {
   googleId: string;
@@ -12,8 +14,8 @@ interface User {
 passport.use(
   new GoogleStrategy(
     {
-      clientID: process.env.GOOGLE_CLIENT_ID|| '',
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET|| '',
+      clientID: process.env.GOOGLE_CLIENT_ID || '',
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
       callbackURL: `${process.env.BASE_URL}/auth/google/callback`,
       scope: ['profile', 'email'],
     },

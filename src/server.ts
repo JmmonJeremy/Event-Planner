@@ -1,16 +1,17 @@
-import express, { Express, Request, Response } from "express";
+import express, { Express, NextFunction, Request, Response } from "express";
 import session from 'express-session';
 import connectMongoDBSession from 'connect-mongodb-session';
 import dotenv from "dotenv";
 import cors from "cors";
-import passport from 'passport';
-import passportConfig from './config/passport';
+// import passport from 'passport';
+import { Strategy as GoogleStrategy, Profile } from 'passport-google-oauth20';
+import passport from './config/passport';
 import routes from "./routes"; 
 import { connectDB } from "./config/database";
 import swaggerUi from "swagger-ui-express";
-import { SwaggerOptions } from 'swagger-ui-express';
 import { SwaggerUiOptions } from 'swagger-ui-express';
 import swaggerDocument from "../swagger-output.json"; // Path to the generated Swagger JSON file
+
 const MongoDBStore = connectMongoDBSession(session);
 
 dotenv.config();
@@ -97,6 +98,12 @@ app.use(session({
   resave: false, // Prevent resaving unmodified sessions
   saveUninitialized: false, // Don’t save uninitialized sessions
 }));
+
+interface User {
+  googleId: string;
+  name: string;
+  email: string;
+}
 
 // Initialize Passport and enable persistent login sessions
 app.use(passport.initialize())
