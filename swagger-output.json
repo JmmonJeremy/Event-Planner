@@ -14,7 +14,7 @@
     "GoogleOAuth2": {
       "type": "oauth2",
       "flow": "implicit",
-      "authorizationUrl": "https://team-members-passport-oauth-version.onrender.com/auth/google",
+      "authorizationUrl": "https://event-planner-nkma.onrender.com/auth/google",
       "description": "Use Google OAuth2 to authenticate <b>Exchange the hidden GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET for JWT_Token.</b>"
     }
   },

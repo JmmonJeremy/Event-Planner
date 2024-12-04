@@ -17,7 +17,7 @@ const MongoDBStore = connectMongoDBSession(session);
 dotenv.config();
 
 const store = new MongoDBStore({
-  uri: process.env.MONGODB_URI as string,
+  uri: process.env.MONGO_URI as string,
   collection: 'sessions'
 });
 
