@@ -10,6 +10,14 @@
   "schemes": [
     "https"
   ],
+  "securityDefinitions": {
+    "GoogleOAuth2": {
+      "type": "oauth2",
+      "flow": "implicit",
+      "authorizationUrl": "https://team-members-passport-oauth-version.onrender.com/auth/google",
+      "description": "Use Google OAuth2 to authenticate <b>Exchange the hidden GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET for JWT_Token.</b>"
+    }
+  },
   "paths": {
     "/users": {
       "get": {
@@ -67,6 +75,13 @@
             "description": "Unique identifier for the user"
           },
           {
+            "name": "authorization",
+            "in": "header",
+            "description": "JWT token with Bearer prefix",
+            "type": "string",
+            "default": "Bearer "
+          },
+          {
             "name": "body",
             "in": "body",
             "description": "Fields to update",
@@ -107,7 +122,12 @@
           "500": {
             "description": "There was an INTERNAL SERVER ERROR while trying to PUT the data change"
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       },
       "delete": {
         "summary": "DELETES a user by its _id",
@@ -118,6 +138,13 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "description": "JWT token with Bearer prefix",
+            "type": "string",
+            "default": "Bearer "
           }
         ],
         "responses": {
@@ -133,7 +160,12 @@
           "500": {
             "description": "There was an INTERNAL SERVER ERROR while trying to DELETE the user"
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/user": {
@@ -141,6 +173,13 @@
         "summary": "POSTS input to create a new user",
         "description": "The entered user information is added to the database.",
         "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "description": "JWT token with Bearer prefix",
+            "type": "string",
+            "default": "Bearer "
+          },
           {
             "name": "body",
             "in": "body",
@@ -173,7 +212,12 @@
           "500": {
             "description": "There was an INTERNAL SERVER ERROR while trying to POST the selected user"
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
     "/events/": {
