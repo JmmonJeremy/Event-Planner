@@ -12,14 +12,14 @@ interface User {
 }
 
 // Initiate Google OAuth
-authRoutes.get('/google', 
+authRoutes.get('auth/google', 
   // #swagger.ignore = true
   passport.authenticate('google', { scope: ['profile', 'email'] }));
 
 // Handle Google OAuth callback
 authRoutes.get(
   // #swagger.ignore = true
-  '/google/callback',
+  'auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/' }),  
   (req: Request, res: Response) => {
     // Type assertion to ensure req.user has the expected structure
