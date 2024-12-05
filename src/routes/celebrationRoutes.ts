@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import * as celebrationController from '../controllers/celebrationControllers';
 
 const celebrationRoutes = Router();
 
@@ -11,16 +12,12 @@ celebrationRoutes.post('/celebrations/createWithArray', (req, res) => {
 // END Extra CRUD Operation Routes ########################################################################################/
 
 // START Basic CRUD Operation Routes ######################################################################################/
-/*** MAIN 2 types of GET METHODS ******************************************************************************************/
+/*** MAIN 2 types of GET ROUTES ******************************************************************************************/
 // #1 main "Get" ROUTE for getting all CELEBRATIONS for a User
-celebrationRoutes.get('/celebrations/user/:userId', (req, res) => {
-    res.send(`Get celebrations for user ${req.params.userId}`);
-});
+celebrationRoutes.get('/celebrations/user/:userId', celebrationController.getUserCrelebrations);
 
 // #2 main "Get" ROUTE for getting 1 CELEBRATION by celebrationId
-celebrationRoutes.get('/celebrations/:celebrationId', (req, res) => {
-    res.send(`Get celebration with ID ${req.params.celebrationId}`);
-});
+celebrationRoutes.get('/celebrations/:celebrationId', celebrationController.getUsersCelebrationById);
 
 /*** MAIN 3 alter data ROUTES ********************************************************************************************/
 // #1 the "Post" ROUTE for a new CELEBRATION
@@ -37,6 +34,6 @@ celebrationRoutes.put('/celebrations/:celebrationId', (req, res) => {
 celebrationRoutes.delete('/celebrations/:celebrationId', (req, res) => {
     res.send(`Delete celebration with ID ${req.params.celebrationId}`);
 });
-// END Basic CRUD Operation Routes ########################################################################################/
+// END Basic CRUD Operation Routes ########################################################################################/ 
 
 export default celebrationRoutes;
