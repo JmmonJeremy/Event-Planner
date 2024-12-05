@@ -27,7 +27,7 @@ const doc = {
       flow: 'implicit',
       authorizationUrl: isProduction
       // missing /auth/google was the difference between it working and not working
-      ? 'https://team-members-passport-oauth-version.onrender.com/auth/google'
+      ? 'https://event-planner-nkma.onrender.com/auth/google'
       : 'http://localhost:3000/auth/google',
       description: 'Use Google OAuth2 to authenticate <b>Exchange the hidden GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET for JWT_Token.</b>',
       // client_id: process.env.GOOGLE_CLIENT_ID, // Inject client_id dynamically

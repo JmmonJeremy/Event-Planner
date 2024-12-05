@@ -17,7 +17,7 @@ const MongoDBStore = connectMongoDBSession(session);
 dotenv.config();
 
 const store = new MongoDBStore({
-  uri: process.env.MONGODB_URI as string,
+  uri: process.env.MONGO_URI as string,
   collection: 'sessions'
 });
 
@@ -99,15 +99,17 @@ app.use(session({
   saveUninitialized: false, // Don’t save uninitialized sessions
 }));
 
-interface User {
-  googleId: string;
-  name: string;
-  email: string;
-}
-
 // Initialize Passport and enable persistent login sessions
 app.use(passport.initialize())
 .use(passport.session()); // This is needed for persistent login sessions
+
+app.use((req: Request, res: Response, next: NextFunction) => {
+  // Allow CORS for all domains !!!!!!!!!! WOULDN'T WORK ON RENDER WITHOUT THIS !!!!!!!!!!
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  next();
+});
 
 // Connect to MongoDB and start the server 
 // (wrapped in an async function to simplify structure and improve clarity )
