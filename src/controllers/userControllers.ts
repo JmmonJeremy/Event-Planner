@@ -81,6 +81,13 @@ console.log(userId);
 export const create = async (req: Request, res: Response) => { 
 /* #swagger.summary = "POSTS input to create a new user" */ 
 /* #swagger.description = 'The entered user information is added to the database.' */ 
+/* #swagger.security = [{ "bearerAuth": [] }] */
+  /* #swagger.parameters['authorization'] = {
+      in: 'header',
+      description: 'JWT token with Bearer prefix',       
+      type: 'string',
+      default: 'Bearer '
+  } */
 // #swagger.responses[201] = { description: 'SUCCESS, POST created a new user' }
 // #swagger.responses[400] = { description: 'BAD REQUEST your POST was attempted with forbidden entries'}
 // #swagger.responses[412] = { description: 'The PRECONDITION FAILED in the validation of the user data'}
@@ -114,7 +121,14 @@ export const create = async (req: Request, res: Response) => {
 // #2 the "Put" METHOD for updating a USER selected by userId
 export const update = async (req: Request, res: Response): Promise<void> => {
 /* #swagger.summary = "UPDATES a user that has been selected by _id with any new data entered" */   
-/* #swagger.description = 'The changed data for the user updates the database' */      
+/* #swagger.description = 'The changed data for the user updates the database' */
+/* #swagger.security = [{ "bearerAuth": [] }] */
+  /* #swagger.parameters['authorization'] = {
+      in: 'header',
+      description: 'JWT token with Bearer prefix',       
+      type: 'string',
+      default: 'Bearer '
+  } */      
 // #swagger.responses[204] = { description: 'SUCCESS (with no content returned), PUT updated the selected user in the database' }
 // #swagger.responses[400] = { description: 'BAD REQUEST your PUT was attempted with forbidden entries'}
 // #swagger.responses[404] = { description: 'The attempted PUT of the specified user for updating was Not Found'}
@@ -190,6 +204,13 @@ export const update = async (req: Request, res: Response): Promise<void> => {
 export const deleteUser = async (req: Request, res: Response): Promise<void> => {
 /* #swagger.summary = "DELETES a user by its _id" */ 
 /* #swagger.description = 'With deletion it's permanently removed from the database.' */
+/* #swagger.security = [{ "bearerAuth": [] }] */
+  /* #swagger.parameters['authorization'] = {
+      in: 'header',
+      description: 'JWT token with Bearer prefix',       
+      type: 'string',
+      default: 'Bearer '
+  } */
 // #swagger.responses[200] = { description: 'SUCCESS, the user was DELETED' }   
 // #swagger.responses[404] = { description: 'The selected user for DELETION was NOT FOUND'}
 // #swagger.responses[412] = { description: 'The PRECONDITION FAILED in the validation of the _id PARAMETER'}

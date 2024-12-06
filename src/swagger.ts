@@ -12,15 +12,27 @@ const isProduction = process.env.NODE_ENV === 'production';
 console.log('Is Production:', isProduction); // Check if it's true or false
 
 const doc = {
-    info: {
-        title: 'API Documentation',
-        description: 'Calendar API',
+  info: {
+      title: 'API Documentation',
+      description: 'Calendar API',
+  },
+  host: isProduction
+  ? 'event-planner-nkma.onrender.com'
+  : 'localhost:3000',
+  basePath: '/',
+  schemes: isProduction ? ['https'] : ['http'],
+  securityDefinitions: {
+    GoogleOAuth2: {
+      type: 'oauth2',
+      flow: 'implicit',
+      authorizationUrl: isProduction
+      // missing /auth/google was the difference between it working and not working
+      ? 'https://event-planner-nkma.onrender.com/auth/google'
+      : 'http://localhost:3000/auth/google',
+      description: 'Use Google OAuth2 to authenticate <b>Exchange the hidden GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET for JWT_Token.</b>',
+      // client_id: process.env.GOOGLE_CLIENT_ID, // Inject client_id dynamically
     },
-    host: isProduction
-    ? 'event-planner-nkma.onrender.com'
-    : 'localhost:3000',
-    basePath: '/',
-    schemes: isProduction ? ['https'] : ['http'],
+  } 
 };
 
 const outputFile = '../swagger-output.json';

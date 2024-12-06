@@ -1,18 +1,52 @@
-import express, { Express, Request, Response } from "express";
-import swaggerUi from "swagger-ui-express";
+import express, { Express, NextFunction, Request, Response } from "express";
+import session from 'express-session';
+import connectMongoDBSession from 'connect-mongodb-session';
 import dotenv from "dotenv";
 import cors from "cors";
-import { connectDB } from "./config/database"; 
+// import passport from 'passport';
+import { Strategy as GoogleStrategy, Profile } from 'passport-google-oauth20';
+import passport from './config/passport';
 import routes from "./routes"; 
-import { SwaggerOptions } from 'swagger-ui-express';
+import { connectDB } from "./config/database";
+import swaggerUi from "swagger-ui-express";
+import { SwaggerUiOptions } from 'swagger-ui-express';
 import swaggerDocument from "../swagger-output.json"; // Path to the generated Swagger JSON file
+
+const MongoDBStore = connectMongoDBSession(session);
 
 dotenv.config();
 
+const store = new MongoDBStore({
+  uri: process.env.MONGO_URI as string,
+  collection: 'sessions'
+});
+
+store.on('error', (error) => {
+  console.error('Session store error:', error);
+});
+
 const app: Express = express();
 
-const options: { swaggerOptions: SwaggerOptions } = {
-  swaggerOptions: {
+const options: SwaggerUiOptions = {  
+    customCss: `
+      .swagger-ui label,
+      .swagger-ui .auth-container input {
+        display: none;
+      }
+      .swagger-ui .dialog-ux .modal-ux-content p.flow {
+        margin-bottom: 2rem;
+      }
+      .swagger-ui div.markdown b {
+        color: red;
+        position: absolute;
+        bottom: 90px;
+        left: 40px;      
+      }  
+      .swagger-ui .parameter__default {
+        display: none;
+      }   
+    `, // Example of custom CSS directly in the setup  
+    swaggerOptions: { 
     operationsSorter: (a: any, b: any) => {
       const customGroupOrder = ['users', 'user', 'events', 'celebrations', 'classes', 'goals'];
       // Represent the URL paths of two API operations being compared.
@@ -58,6 +92,24 @@ process.on("unhandledRejection", (reason, promise) => {
 app.use(cors()); // Enable CORS for external access
 app.use(express.json());
 
+app.use(session({
+  store,
+  secret: process.env.SESSION_SECRET || 'your_secret_key',
+  resave: false, // Prevent resaving unmodified sessions
+  saveUninitialized: false, // Don’t save uninitialized sessions
+}));
+
+// Initialize Passport and enable persistent login sessions
+app.use(passport.initialize())
+.use(passport.session()); // This is needed for persistent login sessions
+
+app.use((req: Request, res: Response, next: NextFunction) => {
+  // Allow CORS for all domains !!!!!!!!!! WOULDN'T WORK ON RENDER WITHOUT THIS !!!!!!!!!!
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  next();
+});
 
 // Connect to MongoDB and start the server 
 // (wrapped in an async function to simplify structure and improve clarity )
@@ -71,7 +123,13 @@ app.use(express.json());
       res.send("Welcome to the API! Documentation available at /api-docs");
     });
     app.use("/", routes);
-    app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument, options));
+    app.use("/api-docs", 
+      swaggerUi.serve, 
+      swaggerUi.setup(swaggerDocument, options));
+
+    app.use('/', (req, res) => {
+        res.status(404).json({ message: "Route not found" });
+      });
 
     // Global error handler (Placing below routes ensures the error handler is the last middleware in the stack,
     // Placing before app.listen ensures server setup is completed & errors are handled properly.)
