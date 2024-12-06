@@ -12,8 +12,7 @@ import mongoose from 'mongoose';
 // START Basic CRUD Operation Methods ######################################################################################/
 /*** MAIN 2 types of GET METHODS ******************************************************************************************/
 // #1 main "Get" METHOD for getting all CELEBRATIONS for a User
-export const getAllUserCrelebrations = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-  /* #swagger.security = [{ "bearerAuth": [] }] */
+export const getUsersCrelebrations = async (req: Request, res: Response, next: NextFunction): Promise<void> => { 
   /* #swagger.summary = "GETS all Private celebrations associated with a selected user _id ---------- (!!!OAUTH PROTECTED ROUTE!!!)" */ 
   /* #swagger.description = 'All Private celebrations associated with a selected user are displayed.' */
   // #swagger.responses[200] = { description: 'SUCCESS, GET returned all celebrations associated with the user' } 
@@ -69,8 +68,7 @@ export const getAllUserCrelebrations = async (req: Request, res: Response, next:
   };
 };
 // #2 main "Get" METHOD for getting 1 CELEBRATION by celebrationId for a User
-export const getUsersPrivateCelebrationById = async (req: Request, res: Response): Promise<void> => { 
-  /* #swagger.security = [{ "bearerAuth": [] }] */
+export const getUsersCelebrationById = async (req: Request, res: Response): Promise<void> => {  
   /* #swagger.summary = "GETS the celebration belonging to a user by _id ---------- (!!!OAUTH PROTECTED ROUTE!!!)" */   
   /* #swagger.description = 'The celebration is displayed.' */      
   // #swagger.responses[200] = { description: 'SUCCESS, GET returned the selected celebration belonging to the user' }

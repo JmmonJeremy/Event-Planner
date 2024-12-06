@@ -79,7 +79,7 @@ console.log(userId);
 /*** MAIN 3 alter data METHODS ********************************************************************************************/
 // #1 the "Post" METHOD for a new USER
 export const create = async (req: Request, res: Response) => { 
-/* #swagger.summary = "POSTS input to create a new user" */ 
+/* #swagger.summary = "POSTS input to create a new user ---------- (!!!OAUTH PROTECTED ROUTE!!!)" */ 
 /* #swagger.description = 'The entered user information is added to the database.' */ 
 /* #swagger.security = [{ "bearerAuth": [] }] */
   /* #swagger.parameters['authorization'] = {
@@ -120,7 +120,7 @@ export const create = async (req: Request, res: Response) => {
 
 // #2 the "Put" METHOD for updating a USER selected by userId
 export const update = async (req: Request, res: Response): Promise<void> => {
-/* #swagger.summary = "UPDATES a user that has been selected by _id with any new data entered" */   
+/* #swagger.summary = "UPDATES a user that has been selected by _id with any new data entered ---------- (!!!OAUTH PROTECTED ROUTE!!!)" */   
 /* #swagger.description = 'The changed data for the user updates the database' */
 /* #swagger.security = [{ "bearerAuth": [] }] */
   /* #swagger.parameters['authorization'] = {
@@ -202,7 +202,7 @@ export const update = async (req: Request, res: Response): Promise<void> => {
 
 // The "Delete" METHOD for removing a USER selected by userId
 export const deleteUser = async (req: Request, res: Response): Promise<void> => {
-/* #swagger.summary = "DELETES a user by its _id" */ 
+/* #swagger.summary = "DELETES a user by its _id ---------- (!!!OAUTH PROTECTED ROUTE!!!)" */ 
 /* #swagger.description = 'With deletion it's permanently removed from the database.' */
 /* #swagger.security = [{ "bearerAuth": [] }] */
   /* #swagger.parameters['authorization'] = {
