@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt, { JwtPayload, VerifyErrors } from 'jsonwebtoken';
+import BlacklistedTokenModel from '../models/blacklistedTokenModel'; // Import the blacklist model
 
 interface DecodedUser extends JwtPayload {
   googleId: string;
@@ -10,7 +11,7 @@ interface DecodedUser extends JwtPayload {
 }
 
 // Middleware to authenticate JWT
-function authenticateJWT(req: Request, res: Response, next: NextFunction): void {
+async function authenticateJWT(req: Request, res: Response, next: NextFunction):Promise<void> {
   const authHeader = req.headers['authorization']; // Retrieve the Authorization header
   console.log('Authorization Header:', authHeader);
 
@@ -24,8 +25,35 @@ function authenticateJWT(req: Request, res: Response, next: NextFunction): void 
     return;
   }
 
-  jwt.verify(token, process.env.JWT_SECRET as string, (err: VerifyErrors | null, user: JwtPayload | any) => {
+  try {
+    // Check if the token exists in the blacklist
+    const blacklisted = await BlacklistedTokenModel.findOne({ token });
+
+    if (blacklisted) {
+      res.status(401).json({ message: 'You are NOT AUTHORIZED because the token is no longer valid due to logging out' });
+      return;
+    }
+  } catch (err) {
+    console.error('Error checking blacklist:', err);
+    res.status(500).json({ message: 'Error checking blacklist' });
+    return;
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET as string, (err: VerifyErrors | null, user: JwtPayload | any) => {    
     if (err) {
+      if (err.name === 'TokenExpiredError') {
+        // Handle expired token
+        console.error('Token expired:', err);      
+        // Clear the session
+        req.session.destroy((err) => {
+          if (err) {
+            console.error('Error destroying session:', err);
+            return res.status(500).json({ message: 'Error clearing session' });
+          }      
+          // Clear the session cookie
+          res.clearCookie('connect.sid'); // Ensure the session cookie is cleared      
+        });
+      }
       console.error('JWT Verification Error:', err.message);
       res.sendStatus(403); // Forbidden if invalid token
       return;

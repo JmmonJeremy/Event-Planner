@@ -19,6 +19,16 @@
     }
   },
   "paths": {
+    "/auth/logout": {
+      "post": {
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/users": {
       "get": {
         "summary": "GETS all the users",
@@ -64,7 +74,7 @@
         }
       },
       "put": {
-        "summary": "UPDATES a user that has been selected by _id with any new data entered",
+        "summary": "UPDATES a user that has been selected by _id with any new data entered ---------- (!!!OAUTH PROTECTED ROUTE!!!)",
         "description": "The changed data for the user updates the database",
         "parameters": [
           {
@@ -130,7 +140,7 @@
         ]
       },
       "delete": {
-        "summary": "DELETES a user by its _id",
+        "summary": "DELETES a user by its _id ---------- (!!!OAUTH PROTECTED ROUTE!!!)",
         "description": "With deletion it",
         "parameters": [
           {
@@ -170,7 +180,7 @@
     },
     "/user": {
       "post": {
-        "summary": "POSTS input to create a new user",
+        "summary": "POSTS input to create a new user ---------- (!!!OAUTH PROTECTED ROUTE!!!)",
         "description": "The entered user information is added to the database.",
         "parameters": [
           {
@@ -241,9 +251,6 @@
             "schema": {
               "type": "object",
               "properties": {
-                "userId": {
-                  "example": "any"
-                },
                 "name": {
                   "example": "any"
                 },
@@ -254,6 +261,9 @@
                   "example": "any"
                 },
                 "location": {
+                  "example": "any"
+                },
+                "userId": {
                   "example": "any"
                 }
               }
@@ -266,6 +276,106 @@
           },
           "400": {
             "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/events/{eventId}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Fields to update",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "any"
+                },
+                "description": {
+                  "type": "string",
+                  "example": "any"
+                },
+                "date": {
+                  "type": "Date",
+                  "example": "YYYY-MM-DDT00:00:00.000Z"
+                },
+                "location": {
+                  "type": "string",
+                  "example": "any"
+                },
+                "userId": {
+                  "type": "mongoose.Schema.Types.ObjectId",
+                  "example": "any"
+                }
+              },
+              "required": "email"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
           }
         }
       }
@@ -514,29 +624,45 @@
         }
       }
     },
-    "/celebrations": {
-      "post": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
+    "/celebrations/user/{userId}": {
+      "get": {
+        "summary": "GETS all Private celebrations associated with a selected user _id ---------- (!!!OAUTH PROTECTED ROUTE!!!)",
+        "description": "All Private celebrations associated with a selected user are displayed.",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "The MongoDB ObjectId under the _id label."
           }
-        }
-      }
-    },
-    "/celebrations/createWithArray": {
-      "post": {
-        "description": "",
+        ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "SUCCESS, GET returned all celebrations associated with the user"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "You are NOT AUTHORIZED to GET the celebrations"
+          },
+          "404": {
+            "description": "The selected user associated with celebrations was NOT FOUND"
+          },
+          "412": {
+            "description": "The PRECONDITION FAILED in the validation of the USER _id PARAMETER"
+          },
+          "500": {
+            "description": "There was an INTERNAL SERVER ERROR while trying to GET all celebrations associated with the user"
           }
         }
       }
     },
     "/celebrations/{celebrationId}": {
       "get": {
-        "description": "",
+        "summary": "GETS the celebration belonging to a user by _id ---------- (!!!OAUTH PROTECTED ROUTE!!!)",
+        "description": "The celebration is displayed.",
         "parameters": [
           {
             "name": "celebrationId",
@@ -547,28 +673,116 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "SUCCESS, GET returned the selected celebration belonging to the user"
+          },
+          "401": {
+            "description": "You are NOT AUTHORIZED to GET this celebration"
+          },
+          "404": {
+            "description": "The selected celebration was NOT FOUND"
+          },
+          "412": {
+            "description": "The PRECONDITION FAILED in the validation of the CELBRATION _id PARAMETER"
+          },
+          "500": {
+            "description": "There was an INTERNAL SERVER ERROR while trying to GET the selected celebration"
           }
         }
       },
       "put": {
-        "description": "",
+        "summary": "UPDATES a celebration that has been selected by id with the request body ---------- (!!!OAUTH PROTECTED ROUTE!!!)",
+        "description": "The updated request body for the celebration changes the database.",
         "parameters": [
           {
             "name": "celebrationId",
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Fields to update",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "person": {
+                  "type": "string",
+                  "example": "Updated person"
+                },
+                "occasion": {
+                  "type": "string",
+                  "example": "Updated occasion"
+                },
+                "plan": {
+                  "type": "string",
+                  "example": "Updated plan"
+                },
+                "date": {
+                  "type": "string",
+                  "format": "date",
+                  "example": "2024-12-31"
+                },
+                "location": {
+                  "type": "string",
+                  "example": "Updated location"
+                },
+                "othersInvolved": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "example": [
+                    "Velma",
+                    "Shaggy",
+                    "Scooby"
+                  ]
+                },
+                "visibility": {
+                  "type": "string",
+                  "enum": [
+                    "Private",
+                    "Public"
+                  ],
+                  "example": "Private"
+                }
+              },
+              "required": [
+                "person"
+              ]
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "SUCCESS, the celebration was DELETED"
+          },
+          "204": {
+            "description": "SUCCESS, PUT updated the selected celebration in the database"
+          },
+          "401": {
+            "description": "You are NOT AUTHORIZED to DELETE this celebration"
+          },
+          "404": {
+            "description": "The selected celebration for DELETION was NOT FOUND"
+          },
+          "412": {
+            "description": "The PRECONDITION FAILED in the validation of the CELEBRATION _id PARAMETER"
+          },
+          "500": {
+            "description": "There was an INTERNAL SERVER ERROR while trying to DELETE the celebration"
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       },
       "delete": {
-        "description": "",
+        "summary": "DELETES a celebration by its _id ---------- (!!!OAUTH PROTECTED ROUTE!!!)",
+        "description": "After deletion it returns a success code.",
         "parameters": [
           {
             "name": "celebrationId",
@@ -579,27 +793,112 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "SUCCESS, the celebration was DELETED"
+          },
+          "401": {
+            "description": "You are NOT AUTHORIZED to DELETE this celebration"
+          },
+          "404": {
+            "description": "The selected celebration for DELETION was NOT FOUND"
+          },
+          "412": {
+            "description": "The PRECONDITION FAILED in the validation of the CELEBRATION _id PARAMETER"
+          },
+          "500": {
+            "description": "There was an INTERNAL SERVER ERROR while trying to DELETE the celebration"
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     },
-    "/celebrations/user/{userId}": {
-      "get": {
-        "description": "",
+    "/celebrations": {
+      "post": {
+        "summary": "POSTS the data entered to create a new celebration ---------- (!!!OAUTH PROTECTED ROUTE!!!)",
+        "description": "The request body for a new celebration is added to the database.",
         "parameters": [
           {
-            "name": "userId",
-            "in": "path",
+            "name": "body",
+            "in": "body",
+            "description": "Fields to fill out.",
             "required": true,
-            "type": "string"
+            "schema": {
+              "type": "object",
+              "properties": {
+                "person": {
+                  "type": "string",
+                  "example": "New added person"
+                },
+                "occasion": {
+                  "type": "string",
+                  "example": "New added occasion"
+                },
+                "plan": {
+                  "type": "string",
+                  "example": "New added plan"
+                },
+                "user": {
+                  "type": "string",
+                  "example": "New added user (mongoose ObjectId for user labeled _id)"
+                },
+                "date": {
+                  "type": "string",
+                  "format": "date",
+                  "example": "2024-12-24"
+                },
+                "location": {
+                  "type": "string",
+                  "example": "New added location"
+                },
+                "othersInvolved": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "example": [
+                    "Bob",
+                    "Shrily",
+                    "George"
+                  ]
+                },
+                "visibility": {
+                  "type": "string",
+                  "enum": [
+                    "Private",
+                    "Public"
+                  ],
+                  "example": "Public"
+                }
+              },
+              "required": "person"
+            }
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
+          "201": {
+            "description": "SUCCESS, POST added a new celebration to the database"
+          },
+          "400": {
+            "description": "There was a BAD REQUEST ERROR while trying to POST the form page for adding a celebration"
+          },
+          "401": {
+            "description": "You are NOT AUTHORIZED to POST the new celebration"
+          },
+          "412": {
+            "description": "The PRECONDITION FAILED in the validation of the celebration data"
+          },
+          "500": {
+            "description": "There was an INTERNAL SERVER ERROR while trying to POST the request body for adding a celebration"
           }
-        }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
       }
     }
   }

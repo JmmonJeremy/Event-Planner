@@ -27,7 +27,7 @@ userRoutes.get('/user/findByGoogleId', (req, res) => {
 // END Extra CRUD Operation Routes ########################################################################################/
 
 // START Basic CRUD Operation Routes ######################################################################################/
-/*** MAIN 2 types of GET METHODS ******************************************************************************************/
+/*** MAIN 2 types of GET ROUTES ******************************************************************************************/
 // #1 main "Get" ROUTE for getting all USERS
 userRoutes.get('/users', userController.findAll);
 
