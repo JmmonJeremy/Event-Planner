@@ -82,4 +82,42 @@ eventRoutes.delete('/:eventId', async (req: Request, res: Response) => {
   }
 });
 
+eventRoutes.put('/:eventId', async (req: Request, res: Response) => {
+  /* #swagger.parameters['body'] = {
+        in: 'body',
+        description: 'Fields to update',
+        required: true,
+         '@schema': {
+          "type": "object",
+          "properties": { 
+            "name": {
+              "type": "string",
+              "example": "any"
+            },      
+            "description": {
+              "type": "string",
+              "example": "any"
+            },
+            "date": {
+              "type": "Date",
+              "example": "YYYY-MM-DDT00:00:00.000Z"
+            },            
+            "location": {
+              "type": "string",
+              "example": "any"
+            },            
+            "userId": {
+              "type": "mongoose.Schema.Types.ObjectId",
+              "example": "any"
+            }            
+          },
+          "required": "email"
+        }
+      }
+    }
+  */
+  const result = await EventModel.updateOne({ _id: req.params.eventId }, req.body);
+  res.status(204).json(result);
+});
+
 export default eventRoutes;
