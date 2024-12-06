@@ -5,16 +5,16 @@
     "description": "Calendar API",
     "version": "1.0.0"
   },
-  "host": "localhost:3000",
+  "host": "event-planner-nkma.onrender.com",
   "basePath": "/",
   "schemes": [
-    "http"
+    "https"
   ],
   "securityDefinitions": {
     "GoogleOAuth2": {
       "type": "oauth2",
       "flow": "implicit",
-      "authorizationUrl": "http://localhost:3000/auth/google",
+      "authorizationUrl": "https://event-planner-nkma.onrender.com/auth/google",
       "description": "Use Google OAuth2 to authenticate <b>Exchange the hidden GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET for JWT_Token.</b>"
     }
   },
@@ -23,11 +23,8 @@
       "post": {
         "description": "",
         "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
+          "default": {
+            "description": ""
           }
         }
       }
