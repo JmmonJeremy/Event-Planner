@@ -226,7 +226,7 @@ export const deleteUser = async (req: Request, res: Response): Promise<void> => 
       return;
     } else {
       // BACKEND Success OUTPUT 
-      res.send({
+      res.status(200).send({
         message: 'User was deleted successfully!',
       });
       return;

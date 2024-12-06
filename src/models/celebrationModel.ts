@@ -14,7 +14,7 @@ interface ICelebration extends Document {
 
 const celebrationSchema: Schema = new Schema({
   person: { type: String, required: true },
-  ocassion: { type: String, required: true },
+  occasion: { type: String, required: true },
   plan: {type: String, required: true },
   user: { type: Schema.Types.ObjectId, ref: 'User', required: true },  // Reference to the User model
   date: { type: Date, required: true },

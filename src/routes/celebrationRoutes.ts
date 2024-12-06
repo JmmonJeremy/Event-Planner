@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import * as celebrationController from '../controllers/celebrationControllers';
+import authenticateJWT from '../middleware/authMiddleware';
 
 const celebrationRoutes = Router();
 
@@ -16,10 +17,10 @@ celebrationRoutes.post('/celebrations/createWithArray', (req, res) => {
 // START Basic CRUD Operation Routes ######################################################################################/
 /*** MAIN 2 types of GET ROUTES ******************************************************************************************/
 // #1 main "Get" ROUTE for getting all CELEBRATIONS for a User
-celebrationRoutes.get('/celebrations/user/:userId', celebrationController.getUserCrelebrations);
+celebrationRoutes.get('/celebrations/user/:userId', celebrationController.getAllUserCrelebrations);
 
 // #2 main "Get" ROUTE for getting 1 CELEBRATION by celebrationId
-celebrationRoutes.get('/celebrations/:celebrationId', celebrationController.getUsersCelebrationById);
+celebrationRoutes.get('/celebrations/:celebrationId', celebrationController.getUsersPrivateCelebrationById);
 
 /*** MAIN 3 alter data ROUTES ********************************************************************************************/
 // #1 the "Post" ROUTE for a new CELEBRATION
