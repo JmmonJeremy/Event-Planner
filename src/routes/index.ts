@@ -10,7 +10,7 @@ const routes = Router();
 
 routes.use(authRoutes);
 routes.use(userRoutes);
-routes.use(eventRoutes);
+routes.use("/events", eventRoutes);
 routes.use(goalRoutes);
 routes.use(classRoutes);
 routes.use(celebrationRoutes);
