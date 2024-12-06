@@ -5,16 +5,16 @@
     "description": "Calendar API",
     "version": "1.0.0"
   },
-  "host": "event-planner-nkma.onrender.com",
+  "host": "localhost:3000",
   "basePath": "/",
   "schemes": [
-    "https"
+    "http"
   ],
   "securityDefinitions": {
     "GoogleOAuth2": {
       "type": "oauth2",
       "flow": "implicit",
-      "authorizationUrl": "https://event-planner-nkma.onrender.com/auth/google",
+      "authorizationUrl": "http://localhost:3000/auth/google",
       "description": "Use Google OAuth2 to authenticate <b>Exchange the hidden GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET for JWT_Token.</b>"
     }
   },
@@ -516,7 +516,70 @@
     },
     "/classes": {
       "post": {
-        "description": "",
+        "summary": "Creates a class",
+        "description": "Saves a new class into the database.",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "request body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "Web Services"
+                },
+                "teacher": {
+                  "type": "string",
+                  "example": "Mr. FakeTeacher"
+                },
+                "userId": {
+                  "type": "string",
+                  "example": "55532c284e8d64fbf0ea178f"
+                },
+                "startTime": {
+                  "type": "date",
+                  "example": "1970-01-01T09:00"
+                },
+                "length": {
+                  "type": "number",
+                  "example": 90
+                },
+                "days": {
+                  "type": "array",
+                  "example": [
+                    1,
+                    3,
+                    5
+                  ]
+                }
+              },
+              "required": "userId"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "SUCCESS, POST   a new class"
+          },
+          "400": {
+            "description": "BAD REQUEST your POST was attempted with forbidden entries"
+          },
+          "412": {
+            "description": "The PRECONDITION FAILED in the validation of the user data"
+          },
+          "500": {
+            "description": "There was an INTERNAL SERVER ERROR while trying to POST the selected class"
+          }
+        }
+      }
+    },
+    "/classes/createWithArray": {
+      "post": {
+        "summary": "Creates multiple classes",
+        "description": "Saves new classes into the database.",
         "parameters": [
           {
             "name": "reqBody",
@@ -531,24 +594,24 @@
         ],
         "responses": {
           "201": {
-            "description": "Created"
-          }
-        }
-      }
-    },
-    "/classes/createWithArray": {
-      "post": {
-        "description": "",
-        "responses": {
-          "201": {
-            "description": "Created"
+            "description": "SUCCESS, POST created new classes"
+          },
+          "400": {
+            "description": "BAD REQUEST your POST was attempted with forbidden entries"
+          },
+          "412": {
+            "description": "The PRECONDITION FAILED in the validation of the user data"
+          },
+          "500": {
+            "description": "There was an INTERNAL SERVER ERROR while trying to POST the selected classes"
           }
         }
       }
     },
     "/classes/{classId}": {
       "get": {
-        "description": "",
+        "summary": "GETS a class by its _id",
+        "description": "The selected class is displayed.",
         "parameters": [
           {
             "name": "classId",
@@ -559,12 +622,22 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "SUCCESS, GET Retrieved the selected class"
+          },
+          "404": {
+            "description": "The attempted GET of the selected class was Not Found"
+          },
+          "412": {
+            "description": "The PRECONDITION FAILED in the validation of the _id PARAMETER"
+          },
+          "500": {
+            "description": "There was an INTERNAL SERVER ERROR while trying to GET the selected class"
           }
         }
       },
       "put": {
-        "description": "",
+        "summary": "UPDATES a class that has been selected by _id with any new data entered",
+        "description": "The changed data for the user updates the database",
         "parameters": [
           {
             "name": "classId",
@@ -579,18 +652,61 @@
             "required": true,
             "schema": {
               "type": "object",
-              "properties": {}
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "Web Services"
+                },
+                "teacher": {
+                  "type": "string",
+                  "example": "Mr. FakeTeacher"
+                },
+                "userId": {
+                  "type": "string",
+                  "example": "55532c284e8d64fbf0ea178f"
+                },
+                "startTime": {
+                  "type": "date",
+                  "example": "1970-01-01T09:00"
+                },
+                "length": {
+                  "type": "number",
+                  "example": 90
+                },
+                "days": {
+                  "type": "array",
+                  "example": [
+                    1,
+                    3,
+                    5
+                  ]
+                }
+              },
+              "required": "userId"
             }
           }
         ],
         "responses": {
           "204": {
-            "description": "No Content"
+            "description": "SUCCESS (with no content returned), PUT   the selected class in the database"
+          },
+          "400": {
+            "description": "BAD REQUEST your PUT was attempted with forbidden entries"
+          },
+          "404": {
+            "description": "The attempted PUT of the specified class for updating was Not Found"
+          },
+          "412": {
+            "description": "The PRECONDITION FAILED in the validation of the class data"
+          },
+          "500": {
+            "description": "There was an INTERNAL SERVER ERROR while trying to PUT the data change"
           }
         }
       },
       "delete": {
-        "description": "",
+        "summary": "DELETES a class by its _id",
+        "description": "With deletion it",
         "parameters": [
           {
             "name": "classId",
@@ -601,14 +717,24 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "SUCCESS, the class was DELETED"
+          },
+          "404": {
+            "description": "The selected class for DELETION was NOT FOUND"
+          },
+          "412": {
+            "description": "The PRECONDITION FAILED in the validation of the _id PARAMETER"
+          },
+          "500": {
+            "description": "There was an INTERNAL SERVER ERROR while trying to DELETE the class"
           }
         }
       }
     },
     "/classes/user/{userId}": {
       "get": {
-        "description": "",
+        "summary": "GETS classes by their user's _id",
+        "description": "The selected classes are displayed.",
         "parameters": [
           {
             "name": "userId",
@@ -619,7 +745,16 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "SUCCESS, GET Retrieved the selected classes"
+          },
+          "404": {
+            "description": "The attempted GET of the selected classes was Not Found"
+          },
+          "412": {
+            "description": "The PRECONDITION FAILED in the validation of the _id PARAMETER"
+          },
+          "500": {
+            "description": "There was an INTERNAL SERVER ERROR while trying to GET the selected classes"
           }
         }
       }
