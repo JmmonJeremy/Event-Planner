@@ -7,6 +7,8 @@ const celebrationRoutes = Router();
 /*** EXTRA types of POST ROUTES ********************************************************************************************/
 // #1 extra "Post" ROUTE to create multiple CELEBRATIONS at once
 celebrationRoutes.post('/celebrations/createWithArray', (req, res) => {
+    // #swagger.ignore = true
+    /* #swagger.summary = "Extra POST Route for creating multiple celebrations at once" */ 
     res.send('Create multiple celebrations');
 });
 // END Extra CRUD Operation Routes ########################################################################################/
@@ -21,19 +23,13 @@ celebrationRoutes.get('/celebrations/:celebrationId', celebrationController.getU
 
 /*** MAIN 3 alter data ROUTES ********************************************************************************************/
 // #1 the "Post" ROUTE for a new CELEBRATION
-celebrationRoutes.post('/celebrations', (req, res) => {
-    res.send('Create a new celebration');
-});
+celebrationRoutes.post('/celebrations', celebrationController.addCelebration);
 
 // #2 the "Put" ROUTE for updating a CELEBRATION selected by celebrationId
-celebrationRoutes.put('/celebrations/:celebrationId', (req, res) => {
-    res.send(`Update celebration with ID ${req.params.celebrationId}`);
-});
+celebrationRoutes.put('/celebrations/:celebrationId', celebrationController.updateCelebration);
 
 // #3 the "Delete" ROUTE for removing a CELEBRATION selected by celebrationId
-celebrationRoutes.delete('/celebrations/:celebrationId', (req, res) => {
-    res.send(`Delete celebration with ID ${req.params.celebrationId}`);
-});
+celebrationRoutes.delete('/celebrations/:celebrationId', celebrationController.deleteCelebration);
 // END Basic CRUD Operation Routes ########################################################################################/ 
 
 export default celebrationRoutes;

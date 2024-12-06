@@ -52,12 +52,12 @@ export const getUserCrelebrations = async (req: Request, res: Response, next: Ne
       }  
   } catch(err: unknown) {
     const errorMessage = err instanceof Error ? err.message : 'An unknown error occurred';
+    console.error(err);
     // BACKEND Failure OUTPUT 
     res.status(500).send({
       message: errorMessage,
     }); 
-    // FRONTEND Failure OUTPUT  
-    // console.error(err);
+    // // FRONTEND Failure OUTPUT     
     // res.status(500).render('error/500');
   };
 };
@@ -71,7 +71,7 @@ export const getUsersCelebrationById = async (req: Request, res: Response): Prom
   // #swagger.responses[404] = { description: 'The selected celebration was NOT FOUND' }
   // #swagger.responses[412] = { description: 'The PRECONDITION FAILED in the validation of the CELBRATION _id PARAMETER'}
   // #swagger.responses[500] = { description: 'There was an INTERNAL SERVER ERROR while trying to GET the selected celebration'}
-  const celebrationId: string = req.params.userId; // put here so it applies to both try & catch
+  const celebrationId: string = req.params.celebrationId; // put here so it applies to both try & catch
   try {  
     const celebration = await CelebrationModel.findOne({ _id: celebrationId })
     .populate<{ user: IUser }>('user') // Populate the user field - Tells TypeScript that `user` is populated as an `IUser`
@@ -106,19 +106,268 @@ export const getUsersCelebrationById = async (req: Request, res: Response): Prom
         message: `Error retrieving celebration with celebrationId: ${celebrationId}. ${err.message}`,
       });
       return;
-      // FRONTEND Failure OUTPUT
-      console.error(err)
-      res.status(500).render('error/500');
-      return;
+      // // FRONTEND Failure OUTPUT      
+      // res.status(500).render('error/500');
+      // return;
     }
   };
 };
 
 /*** MAIN 3 alter data METHODS ********************************************************************************************/
 // #1 the "Post" METHOD for a new CELEBRATION
+export const addCelebration = async (req: Request, res: Response): Promise<void> => {
+  /* #swagger.security = [{ "bearerAuth": [] }] */
+  /* #swagger.summary = "POSTS the data entered to create a new celebration ---------- (!!!OAUTH PROTECTED ROUTE!!!)" */   
+  /* #swagger.description = 'The request body for a new celebration is added to the database.  */
+  // #swagger.responses[201] = { description: 'SUCCESS, POST added a new celebration to the database' }
+  // #swagger.responses[401] = { description: 'You are NOT AUTHORIZED to POST the new celebration'}
+  // #swagger.responses[412] = { description: 'The PRECONDITION FAILED in the validation of the celebration data'}
+  // #swagger.responses[400] = { description: 'There was a BAD REQUEST ERROR while trying to POST the form page for adding a celebration'}
+  // #swagger.responses[500] = { description: 'There was an INTERNAL SERVER ERROR while trying to POST the request body for adding a celebration'}
+  try {
+        /* #swagger.parameters['body'] = {
+            in: 'body',
+            description: 'Fields to fill out.',                  
+            required: true,
+            '@schema': {
+              "type": "object",
+              "properties": {       
+                "person": {
+                  "type": "string",
+                  "example": "New added person"
+                },
+                "occasion": {
+                  "type": "string",
+                  "example": "New added occasion"
+                },
+                "plan": {
+                  "type": "string",
+                  "example": "New added plan"
+                },
+                "user": {
+                  "type": "string",
+                  "example": "New added user"
+                },             
+                "date": {
+                  "type": "string",
+                  "format": "date",
+                  "example": "2024-12-24"
+                },
+                "location": {
+                  "type": "string",
+                  "example": "New added location"
+                },
+                "othersInvolved": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "example": ["Bob", "Shrily", "George"],
+                },
+                "visibility": {
+                  "type": "string",
+                  "enum": ['Private', 'Public']",
+                  "example": "Public"
+                }           
+              },
+              "required": ["person"]
+            }
+          }
+        }
+      */ 
+    // Ensures the new record created is associated with the authenticated user 
+    // by adding their ID to the user field in the request body.  
+    // req.body.user = (req.user as IUser).id // wait until logging in creates a user & OAuth added    
+    const celebration = await CelebrationModel.create(req.body) 
+    // BACKEND Success OUTPUT 
+    res.status(201).json( celebration ); 
+    // // FRONTEND Success OUTPUT  
+    // res.status(201).redirect('/dashboard?created=true')
+  } catch (err) {
+    if (err instanceof Error) {
+      console.error(err.message);
+      // BACKEND Failure OUTPUT 
+      res.status(500).json({ message: err.message });
+      // // FRONTEND Failure OUTPUT       
+      // res.status(500).render('error/500');
+    } else {
+      console.error('An unknown error occurred while creating a celebration');
+      // BACKEND Failure OUTPUT 
+      res.status(400).json({ message: 'An unknown error occurred while creating a celebration' });
+      // // FRONTEND Failure OUTPUT       
+      // res.status(400).render('error/500');
+    }
+  };
+};
 
 // #2 the "Put" METHOD for updating a CELEBRATION selected by celebrationId
+export const updateCelebration = async (req: Request, res: Response): Promise<void> => {
+  /* #swagger.security = [{ "bearerAuth": [] }] */  
+  /* #swagger.summary = "UPDATES a celebration that has been selected by id with the request body ---------- (!!!OAUTH PROTECTED ROUTE!!!)" */   
+  /* #swagger.description = 'The updated request body for the celebration changes the database.
+  // #swagger.responses[200] = { description: 'SUCCESS, PUT updated the selected celebration in the database' }
+  // #swagger.responses[401] = { description: 'You are NOT AUTHORIZED to PUT the update for the selected celebration'}
+  // #swagger.responses[404] = { description: 'The attempted PUT of the specified celebration for updating was Not Found'}
+  // #swagger.responses[412] = { description: 'The PRECONDITION FAILED in the validation of the celebration data'}
+  // #swagger.responses[500] = { description: 'There was an INTERNAL SERVER ERROR while trying to PUT the update for the selected celebration'}
+  /* #swagger.parameters['id'] = {       
+         description: 'Equal to the Unique identifier _id field for the celebration (ie: 6736b9dc941b8c39d5d9ef23)',      
+     } */
+  const celebrationId: string = req.params.celebrationId; // put here so it applies to both try & catch
+  try {    
+        /* #swagger.parameters['body'] = {
+            in: 'body',
+            description: 'Fields to update',
+            required: true,
+            '@schema': {
+              "type": "object",
+              "properties": {         
+                "person": {
+                  "type": "string",
+                  "example": "New added person"
+                },
+                "occasion": {
+                  "type": "string",
+                  "example": "New added occasion"
+                },
+                "plan": {
+                  "type": "string",
+                  "example": "New added plan"
+                },
+                "user": {
+                  "type": "string",
+                  "example": "New added user"
+                },             
+                "date": {
+                  "type": "string",
+                  "format": "date",
+                  "example": "2024-12-24"
+                },
+                "location": {
+                  "type": "string",
+                  "example": "New added location"
+                },
+                "othersInvolved": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "example": ["Bob", "Shrily", "George"],
+                },
+                "visibility": {
+                  "type": "string",
+                  "enum": ['Private', 'Public']",
+                  "example": "Public"
+                }           
+              },
+              "required": ["person"]
+            }
+          }
+        }
+      */ 
+    // Ensures the new record created is associated with the authenticated user     
+    const userId = (req.user as IUser).id;
+    let celebration = await CelebrationModel.findById(celebrationId).lean();
+    const celebrations = await CelebrationModel.find({ user: userId }).populate('user').lean();
+    if (!celebration) {
+      // BACKEND Failure OUTPUT 
+      res.status(404).send({
+        message: `Cannot update celebration with celebrationId=${celebrationId}. This celebrationId was not found!`,
+      });
+      return;
+      // // FRONTEND Failure OUTPUT 
+      // res.status(404).render('error/404');
+      // return;
+    }
+    // //  checks if the logged-in user's id does not match the user associated with the celebration    
+    // if (celebration.user.toString() !== userId) { //add when OAuth exists
+    //   res.status(401).redirect('/error/401')
+    // } 
+    else {
+      celebration = await CelebrationModel.findOneAndUpdate({ celebrationId }, req.body, {
+        new: true,
+        runValidators: true,
+      }) 
+      // BACKEND Success OUTPUT 
+      res.status(204).send({ message: 'User was updated successfully.' });
+      return;  
+      // // FRONTEND Success OUTPUT  
+      // // Changed this from res.redirect to stop errors in swagger doc & .rest routes
+      // const updated = 'true'; 
+      // res.status(200).render('dashboard', {      
+      //   name: `${(req.user as IUser).name}`,      
+      //   celebrations,     
+      //   updated, // Pass this to the Handlebars template        
+      // });
+    }
+  } catch (err) {
+    console.error(err);
+    // BACKEND Failure OUTPUT 
+    res.status(500).send({
+      message: `Error updating user with creationId=${celebrationId}. Error states: ${err}`,
+    });
+    return;
+    // FRONTEND Failure OUTPUT    
+    res.status(500).render('error/500');
+    return;
+  }
+};
 
 // #3 the "Delete" METHOD for removing a CELEBRATION selected by celebrationId
-
+export const deleteCelebration = async (req: Request, res: Response): Promise<void> => {
+  /* #swagger.security = [{ "bearerAuth": [] }] */
+  /* #swagger.summary = "DELETES a celebration by its _id ---------- (!!!OAUTH PROTECTED ROUTE!!!)" */ 
+  /* #swagger.description = 'After deletion it returns a success code.' */
+  // #swagger.responses[200] = { description: 'SUCCESS, the celebration was DELETED' }
+  // #swagger.responses[401] = { description: 'You are NOT AUTHORIZED to DELETE this celebration'}
+  // #swagger.responses[404] = { description: 'The selected celebration for DELETION was NOT FOUND'}
+  // #swagger.responses[412] = { description: 'The PRECONDITION FAILED in the validation of the CELEBRATION _id PARAMETER'}
+  // #swagger.responses[500] = { description: 'There was an INTERNAL SERVER ERROR while trying to DELETE the celebration'}
+  const celebrationId: string = req.params.celebrationId; // put here so it applies to both try & catch
+  try {
+    const userId = (req.user as IUser).id;
+    let celebration = await CelebrationModel.findById(celebrationId).lean();
+    const celebrations = await CelebrationModel.find({ user: userId }).populate('user').lean();
+    if (!celebration) {
+      // BACKEND Failure OUTPUT 
+      res.status(404).send({
+        message: `Cannot delete celebration with celebrationId=${celebrationId}. This celebrationId was not found!`,
+      });
+      return;
+      // // FRONTEND Failure OUTPUT
+      // res.status(404).render('error/404');
+      // return;
+    }
+    // //  checks if the logged-in user's id does not match the user associated with the celebration  
+    // if (celebration.user.toString() !== userId) { //add when OAuth exists
+    //   res.status(401).render('/error/401')
+    // } 
+    else {
+      await CelebrationModel.deleteOne({ _id: celebrationId })
+      // BACKEND Success OUTPUT 
+      res.send({
+        message: 'Celebration was deleted successfully!',
+      });
+      return;
+      // // FRONTEND Success OUTPUT 
+      // // Changed this from res.redirect to stop errors in swagger doc & .rest routes
+      // const deleted = 'true'; 
+      // res.status(200).render('dashboard', {      
+      //   name: `${(req.user as IUser).name}`,      
+      //   celebrations,     
+      //   deleted, // Pass this to the Handlebars template        
+      // });
+    }
+  } catch(err) {
+    console.error(err)
+    // BACKEND Failure OUTPUT 
+    res.status(500).send({
+      message: 'Deletion error. Could not delete celebration with celebrationId=' + celebrationId,
+    });
+    return;
+    // FRONTEND Failure OUTPUT 
+    res.status(500).render('error/500');
+    return;
+  }
+};
 // END Basic CRUD Operation Methods ########################################################################################/ 
