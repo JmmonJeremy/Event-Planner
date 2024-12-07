@@ -34,8 +34,7 @@ passport.use(
 // Serialize user into JWT
 passport.serializeUser((user, done: (error: any, token?: string) => void) => {
   try {
-  const token = jwt.sign(user, process.env.JWT_SECRET || 'default_secret', { expiresIn: '1h' });
-  console.log(`User created: ${token}`);
+  const token = jwt.sign(user, process.env.JWT_SECRET as string, { expiresIn: '1h' });
   console.log('Token Created:', token); // Log the created token
   console.log('User Data for Token:', user); // Log user data used for token creation
   done(null, token);
@@ -46,11 +45,16 @@ passport.serializeUser((user, done: (error: any, token?: string) => void) => {
 
 passport.deserializeUser((token: string, done: (error: any, user?: User | null) => void) => {
   try {
-    const user = jwt.verify(token, process.env.JWT_SECRET || 'default_secret') as User;
+    // On successful authentication, exchange the Google code for a token
+    const user = jwt.verify(token, process.env.JWT_SECRET as string) as User;
     done(null, user);
     console.log('Token Being Validated:', token); // Log the incoming token
-  } catch (err) {
-    done(err, null);
+  } catch (err: any) {
+    if (err.name === 'TokenExpiredError') {
+      console.error('Token expired during deserialization:', err.message);
+      return done(null, null); // User is not authenticated
+    }
+    done(err, null); // Handle other errors
   }
 });
 

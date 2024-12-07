@@ -13,7 +13,7 @@ import mongoose from 'mongoose';
 /*** MAIN 2 types of GET METHODS ******************************************************************************************/
 // #1 main "Get" METHOD for getting all CELEBRATIONS for a User
 export const getUsersCrelebrations = async (req: Request, res: Response, next: NextFunction): Promise<void> => { 
-  /* #swagger.summary = "GETS all Private celebrations associated with a selected user _id ---------- (!!!OAUTH PROTECTED ROUTE!!!)" */ 
+  /* #swagger.summary = "GETS all Private celebrations associated with a selected user _id" */ 
   /* #swagger.description = 'All Private celebrations associated with a selected user are displayed.' */
   // #swagger.responses[200] = { description: 'SUCCESS, GET returned all celebrations associated with the user' } 
   // #swagger.responses[401] = { description: 'You are NOT AUTHORIZED to GET the celebrations' }
@@ -22,7 +22,7 @@ export const getUsersCrelebrations = async (req: Request, res: Response, next: N
   // #swagger.responses[500] = { description: 'There was an INTERNAL SERVER ERROR while trying to GET all celebrations associated with the user' }
   /* #swagger.parameters['userId'] = { 
       in: 'path',
-      description: 'The MongoDB ObjectId under the _id label.',     
+      description: 'The MongoDB ObjectId for the associated USER under the \"user\" label.',     
   } */
   try {
     console.log("PARAMS Object:", req.params);
@@ -69,13 +69,17 @@ export const getUsersCrelebrations = async (req: Request, res: Response, next: N
 };
 // #2 main "Get" METHOD for getting 1 CELEBRATION by celebrationId for a User
 export const getUsersCelebrationById = async (req: Request, res: Response): Promise<void> => {  
-  /* #swagger.summary = "GETS the celebration belonging to a user by _id ---------- (!!!OAUTH PROTECTED ROUTE!!!)" */   
+  /* #swagger.summary = "GETS the celebration belonging to a user by _id" */   
   /* #swagger.description = 'The celebration is displayed.' */      
   // #swagger.responses[200] = { description: 'SUCCESS, GET returned the selected celebration belonging to the user' }
   // #swagger.responses[401] = { description: 'You are NOT AUTHORIZED to GET this celebration' }
   // #swagger.responses[404] = { description: 'The selected celebration was NOT FOUND' }
   // #swagger.responses[412] = { description: 'The PRECONDITION FAILED in the validation of the CELBRATION _id PARAMETER' }
   // #swagger.responses[500] = { description: 'There was an INTERNAL SERVER ERROR while trying to GET the selected celebration' }
+  /* #swagger.parameters['celebrationId'] = { 
+      in: 'path',
+      description: 'The MongoDB ObjectId for CELEBRATION under the \"_id\" label.',     
+  } */
   const celebrationId: string = req.params.celebrationId; // put here so it applies to both try & catch
   try {  
     const celebration = await CelebrationModel.findOne({ _id: celebrationId })
@@ -126,10 +130,17 @@ export const getUsersCelebrationById = async (req: Request, res: Response): Prom
 
 /*** MAIN 3 alter data METHODS ********************************************************************************************/
 // #1 the "Post" METHOD for a new CELEBRATION
-export const addCelebration = async (req: Request, res: Response): Promise<void> => {
-  /* #swagger.security = [{ "bearerAuth": [] }] */
+export const addCelebration = async (req: Request, res: Response): Promise<void> => {  
   /* #swagger.summary = "POSTS the data entered to create a new celebration ---------- (!!!OAUTH PROTECTED ROUTE!!!)" */   
   /* #swagger.description = 'The request body for a new celebration is added to the database.'  */
+  /* #swagger.security = [{ "bearerAuth": [] }] */
+  /* #swagger.parameters['authorization'] = {
+      in: 'header',
+      description: 'JWT token with Bearer prefix',       
+      type: 'string',
+      required: true,
+      default: 'Bearer '
+  } */
   // #swagger.responses[201] = { description: 'SUCCESS, POST added a new celebration to the database' }
   // #swagger.responses[401] = { description: 'You are NOT AUTHORIZED to POST the new celebration' }
   // #swagger.responses[412] = { description: 'The PRECONDITION FAILED in the validation of the celebration data' }
@@ -212,21 +223,31 @@ export const addCelebration = async (req: Request, res: Response): Promise<void>
 };
 
 // #2 the "Put" METHOD for updating a CELEBRATION selected by celebrationId
-export const updateCelebration = async (req: Request, res: Response): Promise<void> => {
-  /* #swagger.security = [{ "bearerAuth": [] }] */  
+export const updateCelebration = async (req: Request, res: Response): Promise<void> => {  
   /* #swagger.summary = "UPDATES a celebration that has been selected by id with the request body ---------- (!!!OAUTH PROTECTED ROUTE!!!)" */   
   /* #swagger.description = 'The updated request body for the celebration changes the database. */
+  /* #swagger.security = [{ "bearerAuth": [] }] */
+  /* #swagger.parameters['authorization'] = {
+      in: 'header',
+      description: 'JWT token with Bearer prefix',       
+      type: 'string',
+      required: true,
+      default: 'Bearer '
+  } */
   // #swagger.responses[204] = { description: 'SUCCESS, PUT updated the selected celebration in the database' }
   // #swagger.responses[401] = { description: 'You are NOT AUTHORIZED to PUT the update for the selected celebration'}
   // #swagger.responses[404] = { description: 'The attempted PUT of the specified celebration for updating was Not Found'}
   // #swagger.responses[412] = { description: 'The PRECONDITION FAILED in the validation of the celebration data'}
   // #swagger.responses[500] = { description: 'There was an INTERNAL SERVER ERROR while trying to PUT the update for the selected celebration'}
+   /* #swagger.parameters['celebrationId'] = { 
+      in: 'path',
+      description: 'The MongoDB ObjectId for CELEBRATION under the \"_id\" label.',     
+  } */
   const celebrationId: string = req.params.celebrationId; // put here so it applies to both try & catch
   try {    
         /* #swagger.parameters['body'] = {
             in: 'body',
-            description: 'Fields to update',
-            required: true,
+            description: 'Fields to update',           
             '@schema': {
               "type": "object",
               "properties": {         
@@ -321,14 +342,25 @@ export const updateCelebration = async (req: Request, res: Response): Promise<vo
 
 // #3 the "Delete" METHOD for removing a CELEBRATION selected by celebrationId
 export const deleteCelebration = async (req: Request, res: Response): Promise<void> => {
-  /* #swagger.security = [{ "bearerAuth": [] }] */
   /* #swagger.summary = "DELETES a celebration by its _id ---------- (!!!OAUTH PROTECTED ROUTE!!!)" */ 
   /* #swagger.description = 'After deletion it returns a success code.' */
+  /* #swagger.security = [{ "bearerAuth": [] }] */
+  /* #swagger.parameters['authorization'] = {
+      in: 'header',
+      description: 'JWT token with Bearer prefix',       
+      type: 'string',
+      required: true,
+      default: 'Bearer '
+  } */
   // #swagger.responses[200] = { description: 'SUCCESS, the celebration was DELETED' }
   // #swagger.responses[401] = { description: 'You are NOT AUTHORIZED to DELETE this celebration'}
   // #swagger.responses[404] = { description: 'The selected celebration for DELETION was NOT FOUND'}
   // #swagger.responses[412] = { description: 'The PRECONDITION FAILED in the validation of the CELEBRATION _id PARAMETER'}
   // #swagger.responses[500] = { description: 'There was an INTERNAL SERVER ERROR while trying to DELETE the celebration'}
+   /* #swagger.parameters['celebrationId'] = { 
+      in: 'path',
+      description: 'The MongoDB ObjectId for CELEBRATION under the \"_id\" label.',     
+  } */
   const celebrationId: string = req.params.celebrationId; // put here so it applies to both try & catch
   try {
     // const userId = (req.user as IUser).id; // wait until logging in creates a user & OAuth added    
