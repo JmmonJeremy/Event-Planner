@@ -5,16 +5,16 @@
     "description": "Calendar API",
     "version": "1.0.0"
   },
-  "host": "localhost:3000",
+  "host": "event-planner-nkma.onrender.com",
   "basePath": "/",
   "schemes": [
-    "http"
+    "https"
   ],
   "securityDefinitions": {
     "GoogleOAuth2": {
       "type": "oauth2",
       "flow": "implicit",
-      "authorizationUrl": "http://localhost:3000/auth/google",
+      "authorizationUrl": "https://event-planner-nkma.onrender.com/auth/google",
       "description": "Use Google OAuth2 to authenticate <b>Exchange the hidden GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET for JWT_Token.</b>"
     }
   },
@@ -55,7 +55,8 @@
             "name": "userId",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "description": "The MongoDB ObjectId for USER under the '_id' label."
           }
         ],
         "responses": {
@@ -82,20 +83,20 @@
             "in": "path",
             "required": true,
             "type": "string",
-            "description": "Unique identifier for the user"
+            "description": "The MongoDB ObjectId for USER under the '_id' label."
           },
           {
             "name": "authorization",
             "in": "header",
             "description": "JWT token with Bearer prefix",
             "type": "string",
+            "required": true,
             "default": "Bearer "
           },
           {
             "name": "body",
             "in": "body",
             "description": "Fields to update",
-            "required": true,
             "schema": {
               "type": "object",
               "properties": {
@@ -111,8 +112,7 @@
                   "type": "string",
                   "example": "password123"
                 }
-              },
-              "required": "email"
+              }
             }
           }
         ],
@@ -147,13 +147,15 @@
             "name": "userId",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "description": "The MongoDB ObjectId for USER under the '_id' label."
           },
           {
             "name": "authorization",
             "in": "header",
             "description": "JWT token with Bearer prefix",
             "type": "string",
+            "required": true,
             "default": "Bearer "
           }
         ],
@@ -188,6 +190,7 @@
             "in": "header",
             "description": "JWT token with Bearer prefix",
             "type": "string",
+            "required": true,
             "default": "Bearer "
           },
           {
@@ -206,7 +209,9 @@
                   "example": "any"
                 }
               }
-            }
+            },
+            "description": "Fields to update",
+            "required": true
           }
         ],
         "responses": {
@@ -761,7 +766,7 @@
     },
     "/celebrations/user/{userId}": {
       "get": {
-        "summary": "GETS all Private celebrations associated with a selected user _id ---------- (!!!OAUTH PROTECTED ROUTE!!!)",
+        "summary": "GETS all Private celebrations associated with a selected user _id",
         "description": "All Private celebrations associated with a selected user are displayed.",
         "parameters": [
           {
@@ -769,7 +774,7 @@
             "in": "path",
             "required": true,
             "type": "string",
-            "description": "The MongoDB ObjectId under the _id label."
+            "description": "The MongoDB ObjectId for the associated USER under the 'user' label."
           }
         ],
         "responses": {
@@ -796,14 +801,15 @@
     },
     "/celebrations/{celebrationId}": {
       "get": {
-        "summary": "GETS the celebration belonging to a user by _id ---------- (!!!OAUTH PROTECTED ROUTE!!!)",
+        "summary": "GETS the celebration belonging to a user by _id",
         "description": "The celebration is displayed.",
         "parameters": [
           {
             "name": "celebrationId",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "description": "The MongoDB ObjectId for CELEBRATION under the '_id' label."
           }
         ],
         "responses": {
@@ -832,13 +838,21 @@
             "name": "celebrationId",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "description": "The MongoDB ObjectId for CELEBRATION under the '_id' label."
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "description": "JWT token with Bearer prefix",
+            "type": "string",
+            "required": true,
+            "default": "Bearer "
           },
           {
             "name": "body",
             "in": "body",
             "description": "Fields to update",
-            "required": true,
             "schema": {
               "type": "object",
               "properties": {
@@ -923,7 +937,16 @@
             "name": "celebrationId",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "string",
+            "description": "The MongoDB ObjectId for CELEBRATION under the '_id' label."
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "description": "JWT token with Bearer prefix",
+            "type": "string",
+            "required": true,
+            "default": "Bearer "
           }
         ],
         "responses": {
@@ -955,6 +978,14 @@
         "summary": "POSTS the data entered to create a new celebration ---------- (!!!OAUTH PROTECTED ROUTE!!!)",
         "description": "The request body for a new celebration is added to the database.",
         "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "description": "JWT token with Bearer prefix",
+            "type": "string",
+            "required": true,
+            "default": "Bearer "
+          },
           {
             "name": "body",
             "in": "body",

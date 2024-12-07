@@ -46,7 +46,13 @@ export const findOne = async (req: Request, res: Response): Promise<void> => {
 // #swagger.responses[200] = { description: 'SUCCESS, GET Retrieved the selected user' }
 // #swagger.responses[404] = { description: 'The attempted GET of the selected user was Not Found'}
 // #swagger.responses[412] = { description: 'The PRECONDITION FAILED in the validation of the _id PARAMETER'}
-// #swagger.responses[500] = { description: 'There was an INTERNAL SERVER ERROR while trying to GET the selected user'}    
+// #swagger.responses[500] = { description: 'There was an INTERNAL SERVER ERROR while trying to GET the selected user'} 
+/* #swagger.parameters['userId'] = { 
+      in: 'path',
+      description: 'The MongoDB ObjectId for USER under the \"_id\" label.', 
+      required: true,
+      type: 'string'    
+  } */   
 const userId: string = req.params.userId;
 console.log(userId);
   try {
@@ -86,12 +92,18 @@ export const create = async (req: Request, res: Response) => {
       in: 'header',
       description: 'JWT token with Bearer prefix',       
       type: 'string',
+      required: true,
       default: 'Bearer '
   } */
 // #swagger.responses[201] = { description: 'SUCCESS, POST created a new user' }
 // #swagger.responses[400] = { description: 'BAD REQUEST your POST was attempted with forbidden entries'}
 // #swagger.responses[412] = { description: 'The PRECONDITION FAILED in the validation of the user data'}
-// #swagger.responses[500] = { description: 'There was an INTERNAL SERVER ERROR while trying to POST the selected user'}  
+// #swagger.responses[500] = { description: 'There was an INTERNAL SERVER ERROR while trying to POST the selected user'} 
+/*#swagger.parameters['body'] = {
+  in: 'body',
+  description: 'Fields to update',
+  required: true
+  }   */
   const { name, email, password } = req.body;
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -127,13 +139,20 @@ export const update = async (req: Request, res: Response): Promise<void> => {
       in: 'header',
       description: 'JWT token with Bearer prefix',       
       type: 'string',
+      required: true,
       default: 'Bearer '
   } */      
 // #swagger.responses[204] = { description: 'SUCCESS (with no content returned), PUT updated the selected user in the database' }
 // #swagger.responses[400] = { description: 'BAD REQUEST your PUT was attempted with forbidden entries'}
 // #swagger.responses[404] = { description: 'The attempted PUT of the specified user for updating was Not Found'}
 // #swagger.responses[412] = { description: 'The PRECONDITION FAILED in the validation of the user data'}
-// #swagger.responses[500] = { description: 'There was an INTERNAL SERVER ERROR while trying to PUT the data change'}  
+// #swagger.responses[500] = { description: 'There was an INTERNAL SERVER ERROR while trying to PUT the data change'}
+/* #swagger.parameters['userId'] = { 
+      in: 'path',
+      description: 'The MongoDB ObjectId for USER under the \"_id\" label.', 
+      required: true,
+      type: 'string'    
+  } */   
   if (!req.body) {
     // BACKEND Failure OUTPUT 
     res.status(400).send({
@@ -141,16 +160,9 @@ export const update = async (req: Request, res: Response): Promise<void> => {
     });
     return;
   }
-  /* #swagger.parameters['userId'] = {
-         in: 'path',
-         description: 'Unique identifier for the user',
-         required: true,
-         type: 'string'
-     } */
   /* #swagger.parameters['body'] = {
         in: 'body',
-        description: 'Fields to update',
-        required: true,
+        description: 'Fields to update',        
          '@schema': {
           "type": "object",
           "properties": { 
@@ -166,8 +178,7 @@ export const update = async (req: Request, res: Response): Promise<void> => {
               "type": "string",
               "example": "password123"
             }            
-          },
-          "required": "email"
+          }
         }
       }
     }
@@ -209,12 +220,19 @@ export const deleteUser = async (req: Request, res: Response): Promise<void> => 
       in: 'header',
       description: 'JWT token with Bearer prefix',       
       type: 'string',
+      required: true,
       default: 'Bearer '
   } */
 // #swagger.responses[200] = { description: 'SUCCESS, the user was DELETED' }   
 // #swagger.responses[404] = { description: 'The selected user for DELETION was NOT FOUND'}
 // #swagger.responses[412] = { description: 'The PRECONDITION FAILED in the validation of the _id PARAMETER'}
 // #swagger.responses[500] = { description: 'There was an INTERNAL SERVER ERROR while trying to DELETE the user'} 
+/* #swagger.parameters['userId'] = { 
+      in: 'path',
+      description: 'The MongoDB ObjectId for USER under the \"_id\" label.', 
+      required: true,
+      type: 'string'    
+  } */ 
   const userId: string = req.params.userId; 
   try {
     const data = await UserModel.findOneAndDelete({ _id: userId }) 

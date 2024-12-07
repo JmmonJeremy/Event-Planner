@@ -48,7 +48,7 @@ const options: SwaggerUiOptions = {
     `, // Example of custom CSS directly in the setup  
     swaggerOptions: { 
     operationsSorter: (a: any, b: any) => {
-      const customGroupOrder = ['users', 'user', 'events', 'celebrations', 'classes', 'goals'];
+      const customGroupOrder = ['users', 'user', 'celebrations', 'events', 'classes', 'goals'];
       // Represent the URL paths of two API operations being compared.
       const pathA = a.get('path');
       const pathB = b.get('path');
@@ -135,7 +135,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
     // Placing before app.listen ensures server setup is completed & errors are handled properly.)
     app.use((err: Error, req: Request, res: Response, next: Function) => {
       console.error(err.stack);
-      res.status(500).send({ message: "Something went wrong!" });
+      res.status(500).send({ message: "Global error handler: Something went wrong!" });
     });
     
     // Start the server
