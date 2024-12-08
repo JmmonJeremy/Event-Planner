@@ -51,7 +51,7 @@ passport.deserializeUser((token: string, done: (error: any, user?: User | null) 
     console.log('Token Being Validated:', token); // Log the incoming token
   } catch (err: any) {
     if (err.name === 'TokenExpiredError') {
-      console.error('Token expired during deserialization:', err.message);
+      console.error('Token expiration found within deserialization:', err.message);
       return done(null, null); // User is not authenticated
     }
     done(err, null); // Handle other errors

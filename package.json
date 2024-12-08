@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "start": "npm run pro-swagger && npx tsc && node dist/server.js",
-    "dev": "npm run swagger && nodemon src/server.ts",
+    "dev": "npm run swagger && npx tsc && nodemon src/server.ts",
     "swagger": "ts-node ./src/swagger.ts",
     "pro-swagger": "cross-env NODE_ENV=production ts-node ./src/swagger.ts"
   },
