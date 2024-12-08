@@ -104,7 +104,7 @@ app.use(passport.initialize())
 .use(passport.session()); // This is needed for persistent login sessions
 
 app.use((req: Request, res: Response, next: NextFunction) => {
-  // Allow CORS for all domains !!!!!!!!!! WOULDN'T WORK ON RENDER WITHOUT THIS !!!!!!!!!!
+  // Allow CORS for all domains !!!!!!!!!! WOULDN'T WORK ON RENDER WITHOUT THIS !!!!!!!!!!  
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
@@ -134,6 +134,9 @@ app.use((req: Request, res: Response, next: NextFunction) => {
     // Global error handler (Placing below routes ensures the error handler is the last middleware in the stack,
     // Placing before app.listen ensures server setup is completed & errors are handled properly.)
     app.use((err: Error, req: Request, res: Response, next: Function) => {
+      if (res.headersSent) {
+        return next(err);  // If response is already sent, delegate to the default error handler
+      }
       console.error(err.stack);
       res.status(500).send({ message: "Global error handler: Something went wrong!" });
     });

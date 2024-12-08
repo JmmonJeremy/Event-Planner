@@ -29,7 +29,6 @@ authRoutes.get(
       res.status(401).json({ message: 'Authentication failed' });
       return;
     }
-
     // On successful authentication, exchange the Google code for a token
     const token = jwt.sign(user, process.env.JWT_SECRET as string, { expiresIn: '1h' });
 

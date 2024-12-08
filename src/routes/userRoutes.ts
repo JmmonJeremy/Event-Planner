@@ -1,6 +1,7 @@
 import { Request, Response, Router } from 'express';
 import * as userController from '../controllers/userControllers';
 import authenticateJWT from '../middleware/authMiddleware';
+import { validate, IDValidationRules, userValidationRules } from '../config/validator';
 
 const userRoutes = Router();
 
@@ -32,17 +33,17 @@ userRoutes.get('/user/findByGoogleId', (req, res) => {
 userRoutes.get('/users', userController.findAll);
 
 // #2 main "Get" ROUTE for getting 1 USER by userId
-userRoutes.get('/user/:userId', userController.findOne);
+userRoutes.get('/user/:userId', IDValidationRules('userId'), validate, userController.findOne);
 
 /*** MAIN 3 alter data ROUTES ********************************************************************************************/
 // #1 the "Post" ROUTE for a new USER
-userRoutes.post('/user', authenticateJWT, userController.create);
+userRoutes.post('/user', authenticateJWT, userValidationRules('create'), validate, userController.create);
 
 // #2 the "Put" ROUTE for updating a USER selected by userId
-userRoutes.put('/user/:userId', authenticateJWT, userController.update);
+userRoutes.put('/user/:userId', authenticateJWT, IDValidationRules('userId'), userValidationRules('update'), validate, userController.update);
 
 // The "Delete" ROUTE for removing a USER selected by userId
-userRoutes.delete('/user/:userId', authenticateJWT, userController.deleteUser);
+userRoutes.delete('/user/:userId', authenticateJWT, IDValidationRules('userId'), validate, userController.deleteUser);
 // END Basic CRUD Operation Routes ########################################################################################/
 
 export default userRoutes;
