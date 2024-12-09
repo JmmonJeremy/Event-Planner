@@ -19,7 +19,7 @@ const celebrationSchema: Schema = new Schema({
   user: { type: Schema.Types.ObjectId, ref: 'User', required: true },  // Reference to the User model
   date: { type: Date, required: true },
   location: {type: String, required: true },
-  othersInvolved: { type: Array<String>, required: true },
+  othersInvolved: { type: Array<String> },
   visibility: { type: String, enum: ['Private', 'Public'], default: 'Public', required: true },
 },
 { timestamps: true } // Adds createdAt and updatedAt

@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt, { JwtPayload, VerifyErrors } from 'jsonwebtoken';
 import BlacklistedTokenModel from '../models/blacklistedTokenModel'; // Import the blacklist model
+import path from 'path';
+import fs from 'fs';
 
 interface DecodedUser extends JwtPayload {
   googleId: string;
@@ -21,7 +23,7 @@ async function authenticateJWT(req: Request, res: Response, next: NextFunction):
   console.log('JWT_SECRET:', process.env.JWT_SECRET);
 
   if (!token) {
-    res.sendStatus(403); // Forbidden if no token
+    res.status(403).json({ message: 'You are NOT AUTHORIZED because the token is missing' }); // Forbidden if no token
     return;
   }
 
@@ -39,30 +41,54 @@ async function authenticateJWT(req: Request, res: Response, next: NextFunction):
     return;
   }
 
-  jwt.verify(token, process.env.JWT_SECRET as string, (err: VerifyErrors | null, user: JwtPayload | any) => {    
+  jwt.verify(token, process.env.JWT_SECRET as string, async (err: VerifyErrors | null, user: JwtPayload | any) => {    
     if (err) {
       if (err.name === 'TokenExpiredError') {
         // Handle expired token
-        console.error('Token expired:', err);      
-        // Clear the session
-        req.session.destroy((err) => {
-          if (err) {
-            console.error('Error destroying session:', err);
-            return res.status(500).json({ message: 'Error clearing session' });
-          }      
-          // Clear the session cookie
-          res.clearCookie('connect.sid'); // Ensure the session cookie is cleared      
-        });
+        console.error('Token expiration found within token verification:', err); 
+         // Destroy the session before sending the response
+        try { 
+          await new Promise<void>((resolve, reject) => {   
+            // Clear the session
+            req.session.destroy((destroyErr) => {
+            if (destroyErr) {
+              console.error('Error destroying session:', destroyErr);
+              return reject(destroyErr); // Reject the promise if there's an error
+            }      
+            // Clear the session cookie
+            console.log("Session destroyed, clearing cookies now...");
+            res.clearCookie('connect.sid'); // Ensure the session cookie is cleared   
+            console.log("Cookies cleared.");
+            resolve(); // Resolve the promise when everything is done      
+            }); 
+          });
+          console.log("Sending response now...");
+          res.status(403).json({ message: 'You are NOT AUTHORIZED because the token has expired' }); // Forbidden if invalid token  
+          // Done to stop the process from haning
+          setImmediate(() => {
+            const tsNodePath = path.resolve('./node_modules/.bin/ts-node'); // Ensure the correct path to ts-node
+            const scriptPath = path.resolve(process.argv[1]); // Path to the current script            
+            setImmediate(() => { // RECOMMENDED FOR PRODUCTION: Tools like PM2 (a popular Node.js process manager) 
+              // or Docker offer more efficient and stable ways to manage restarts. // see Debugging-Code-Saver word doc
+              const pathToServer = path.resolve(__dirname, '../server.ts');
+              fs.utimesSync(pathToServer, new Date(), new Date()); // Update file timestamps
+            });
+          });
+          return;
+        } catch (error) {
+          console.error('Error destroying session or clearing cookie:', error);
+          res.status(500).json({ message: 'Error processing request within token verification' });
+          return;
+        }      
       }
       console.error('JWT Verification Error:', err.message);
-      res.sendStatus(403); // Forbidden if invalid token
+      res.status(403).json({ message: 'You are NOT AUTHORIZED because the token is invalid' }); // Forbidden if invalid token
       return;
     }
-
     const decodedUser = user as DecodedUser;
     console.log('Decoded User:', user);
     req.user = user; // Attach the decoded user data to the request
-    next(); // Continue to the next middleware or route handler
+    next(); // Continue to the next middleware or route handler 
   });
 }
 
