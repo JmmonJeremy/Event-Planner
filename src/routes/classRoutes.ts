@@ -10,9 +10,10 @@ classRoutes.post('/classes/createWithArray', ClassController.createMany);
 
 classRoutes.get('/classes/:classId', IDValidationRules('classId'), validate, ClassController.findOne);
 
-classRoutes.get('/classes/user/:userId', IDValidationRules('userID'), validate, ClassController.findByUserId);
+classRoutes.get('/classes/user/:userId', IDValidationRules('userId'), validate, ClassController.findByUserId);
 
-classRoutes.put('/classes/:classId', IDValidationRules('classId'), validate, ClassController.update);
+classRoutes.put('/classes/:classId', classValidationRules(), IDValidationRules('classId'), validate, ClassController.update);
+
 classRoutes.delete('/classes/:classId', IDValidationRules('classId'), validate, ClassController.deleteClass);
 
 export default classRoutes;
