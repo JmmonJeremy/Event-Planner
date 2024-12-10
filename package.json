@@ -8,7 +8,8 @@
     "dev": "npm run swagger && npx tsc && nodemon src/server.ts",
     "swagger": "ts-node ./src/swagger.ts",
     "pro-swagger": "cross-env NODE_ENV=production ts-node ./src/swagger.ts",
-    "test": "jest"
+    "test": "jest",
+    "test-named": "jest --testNamePattern"
   },
   "author": "",
   "license": "ISC",

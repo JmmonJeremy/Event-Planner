@@ -1,7 +1,9 @@
-import { Request, Response, Router } from 'express';
+import { NextFunction, Request, Response, Router } from 'express';
 import * as userController from '../controllers/userControllers';
 import authenticateJWT from '../middleware/authMiddleware';
 import { validate, IDValidationRules, userValidationRules } from '../config/validator';
+import dotenv from 'dotenv';
+dotenv.config();  // Load environment variables
 
 const userRoutes = Router();
 
@@ -37,13 +39,34 @@ userRoutes.get('/user/:userId', IDValidationRules('userId'), validate, userContr
 
 /*** MAIN 3 alter data ROUTES ********************************************************************************************/
 // #1 the "Post" ROUTE for a new USER
-userRoutes.post('/user', authenticateJWT, userValidationRules('create'), validate, userController.create);
+// IF NOT IN TEST MODEapply the middleware 
+userRoutes.post(
+  "/user",
+  process.env.NODE_ENV === "test" 
+    ? (req: Request, res: Response, next: NextFunction) => {
+        req.user = { id: "mockedUserId", name: "Mocked User", email: "mock@example.com" };
+        next();
+      }
+    : authenticateJWT,
+  userValidationRules("create"), validate, userController.create);
 
 // #2 the "Put" ROUTE for updating a USER selected by userId
-userRoutes.put('/user/:userId', authenticateJWT, IDValidationRules('userId'), userValidationRules('update'), validate, userController.update);
+userRoutes.put('/user/:userId',
+  process.env.NODE_ENV === "test" 
+    ? (req: Request, res: Response, next: NextFunction) => {
+        req.user = { id: "mockedUserId", name: "Mocked User", email: "mock@example.com" };
+        next();
+      }
+    : authenticateJWT, IDValidationRules('userId'), userValidationRules('update'), validate, userController.update);
 
-// The "Delete" ROUTE for removing a USER selected by userId
-userRoutes.delete('/user/:userId', authenticateJWT, IDValidationRules('userId'), validate, userController.deleteUser);
+// #3 The "Delete" ROUTE for removing a USER selected by userId
+userRoutes.delete('/user/:userId',
+  process.env.NODE_ENV === "test" 
+    ? (req: Request, res: Response, next: NextFunction) => {
+        req.user = { id: "mockedUserId", name: "Mocked User", email: "mock@example.com" };
+        next();
+      }
+    : authenticateJWT, IDValidationRules('userId'), validate, userController.deleteUser);
 // END Basic CRUD Operation Routes ########################################################################################/
 
 export default userRoutes;

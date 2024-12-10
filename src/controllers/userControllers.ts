@@ -172,11 +172,11 @@ export const update = async (req: Request, res: Response): Promise<void> => {
             },      
             "email": {
               "type": "string",
-              "example": "Updated@email"
+              "example": "Updated@email.com"
             },
             "password": {
               "type": "string",
-              "example": "password123"
+              "example": "P@ssw0rd123"
             }            
           }
         }
@@ -211,7 +211,7 @@ export const update = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-// The "Delete" METHOD for removing a USER selected by userId
+// #3 The "Delete" METHOD for removing a USER selected by userId
 export const deleteUser = async (req: Request, res: Response): Promise<void> => {
 /* #swagger.summary = "DELETES a user by its _id ---------- (!!!OAUTH PROTECTED ROUTE!!!)" */ 
 /* #swagger.description = 'With deletion it's permanently removed from the database.' */
