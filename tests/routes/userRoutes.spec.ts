@@ -29,7 +29,7 @@ describe("User Routes", () => {
 // #2 Get specific user tests ***********************************************************************
   describe("GET /user/:userId", () => {
     // Setup mocked response.
-    mockingoose(UserModel).toReturn({ name: "John Doe", email: "example@example.com" }, "findOne");
+    mockingoose(UserModel).toReturn({ name: "John Doe", email: "mock@example.com" }, "findOne");
     // Test invalid mongoDB Object Ids (_id)
     test("Shouldn't allow invalid Id Param", async () => {   
       const res = await request(app).get("/user/incorrectLengthForUserMongoDBObjctId");
