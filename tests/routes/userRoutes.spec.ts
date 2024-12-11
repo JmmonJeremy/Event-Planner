@@ -41,6 +41,8 @@ describe("User Routes", () => {
       const res = await request(app).get("/user/mockedUserMongoDBObjctId");
       // Assert
       expect(res.statusCode).toBe(200);
+      expect(res.body).toHaveProperty("_id");
+      expect(res.body?._id).toMatch(/^[a-zA-Z0-9]{24}$/);
       expect(res.body).toMatchObject({
         name: "John Doe",
         email: "mock@example.com",
@@ -78,8 +80,8 @@ describe("User Routes", () => {
         expect(res.statusCode).toBe(expectedStatus);
       }
     );  
-    // Test success case for posting user to the database
-    test("Should post user to the database", async () => {
+    // Test success case for posting a user to the database
+    test("Should post a user to the database", async () => {
       const res = await request(app).post("/user").send(mockedUser);  
       // Assert
       expect(res.statusCode).toBe(201);
@@ -89,7 +91,7 @@ describe("User Routes", () => {
   });
 
 // #4 Put/alter a user tests ******************************************************************
-  describe("PUT /user", () => {
+  describe("PUT /user/:userId", () => {
     // Setup mocked response.    
     const mockedUser = {
       googleId: "222989098722327618222",
@@ -124,15 +126,15 @@ describe("User Routes", () => {
         expect(res.statusCode).toBe(expectedStatus);
       }
     );  
-    // Test success case for updating user in the database
-    test("Should update user to the database", async () => {
+    // Test success case for updating a user in the database
+    test("Should update a user in the database", async () => {
       const res = await request(app).put("/user/mockedUserMongoDBObjctId").send(mockedUser);
       // Assert  
       expect(res.statusCode).toBe(204);    
     });
   });
 
-// #4 Delete a user tests *********************************************************************
+// #5 Delete a user tests *********************************************************************
   describe("DELETE /user/:userId", () => {
     // Setup mocked response.
     mockingoose(UserModel).toReturn({ _id: "mockedUserMongoDBObjctId" }, "findOneAndDelete");
@@ -157,7 +159,5 @@ describe("User Routes", () => {
       expect(res.statusCode).toBe(404);
     });
   });
-
-
 
 });

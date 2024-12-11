@@ -63,6 +63,23 @@ export const userValidationRules = (useCase: string) => {
   ];
 };
 
+const validateDate = (value: string) => {
+  const formats = [
+    /^\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s\d{1,2},\s\d{2,4}\b/, // Example: Dec 12, 2024
+    /^\b(?:January|February|March|April|May|June|July|August|September|October|November|December)\s\d{1,2},\s\d{2,4}\b/, // Example: December 12, 2024
+    /^\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}$/, // Example: 12/12/2024 or 12-12-2024
+    /^\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2}$/, // Example: 12/12/24 or 12-12-24
+  ];
+
+  const isValidFormat = formats.some(format => format.test(value));
+  
+  if (!isValidFormat) {
+    return false;  // Return false to indicate validation failure
+  }
+
+  return true; // Return true if valid
+};
+
 export const celebrationValidationRules = (useCase: string) => {
   return [
     ...fieldValidationRules("person", useCase, 200),
@@ -77,7 +94,17 @@ export const celebrationValidationRules = (useCase: string) => {
       .if((value, { req }) => useCase === 'update') // For 'update'
       .optional() // Applies only to 'update'      
       .matches(/^[a-zA-Z0-9]{24}$/)
-      .withMessage(`Your user was not a valid MongoDB ID`),   
+      .withMessage(`Your user was not a valid MongoDB ID`), 
+    body('date')
+      .if((value, { req }) => useCase === 'create') // For 'create'
+      .exists().withMessage("Date is required") // Applies only to 'create'      
+      .custom(validateDate) // Custom date validation
+      .withMessage('Invalid date format'),  
+    body('date')
+      .if((value, { req }) => useCase === 'update') // For 'update'
+      .optional() // Applies only to 'update'       
+      .custom(validateDate) // Custom date validation
+      .withMessage('Invalid date format'),  
     // Validator for an array of strings
     body('othersInvolved')
       .optional()

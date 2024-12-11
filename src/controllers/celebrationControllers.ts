@@ -364,7 +364,7 @@ export const deleteCelebration = async (req: Request, res: Response): Promise<vo
   const celebrationId: string = req.params.celebrationId; // put here so it applies to both try & catch
   try {
     // const userId = (req.user as IUser).id; // wait until logging in creates a user & OAuth added    
-    let celebration = await CelebrationModel.findById(celebrationId).lean();
+    let celebration = await CelebrationModel.findById(celebrationId).lean();    
     const userId = await celebration?.user._id?.toString();
     // console.log(`userId = ${userId}`);
     const celebrations = await CelebrationModel.find({ user: userId }).populate('user').lean(); // use userId after OAuth is added
