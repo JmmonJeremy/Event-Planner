@@ -106,11 +106,11 @@
                 },
                 "email": {
                   "type": "string",
-                  "example": "Updated@email"
+                  "example": "Updated@email.com"
                 },
                 "password": {
                   "type": "string",
-                  "example": "password123"
+                  "example": "P@ssw0rd123"
                 }
               }
             }
