@@ -1,7 +1,9 @@
-import { Router } from 'express';
+import { NextFunction, Request, Response, Router } from 'express';
 import * as celebrationController from '../controllers/celebrationControllers';
 import authenticateJWT from '../middleware/authMiddleware';
 import { validate, IDValidationRules, celebrationValidationRules } from '../config/validator';
+import dotenv from 'dotenv';
+dotenv.config();  // Load environment variables
 
 const celebrationRoutes = Router();
 
@@ -25,13 +27,31 @@ celebrationRoutes.get('/celebrations/:celebrationId', IDValidationRules('celebra
 
 /*** MAIN 3 alter data ROUTES ********************************************************************************************/
 // #1 the "Post" ROUTE for a new CELEBRATION
-celebrationRoutes.post('/celebrations', authenticateJWT, celebrationValidationRules('create'), validate, celebrationController.addCelebration);
+celebrationRoutes.post('/celebrations',
+    process.env.NODE_ENV === "test" 
+      ? (req: Request, res: Response, next: NextFunction) => {
+          req.user = { id: "mockedUserId", name: "Mocked User", email: "mock@example.com" };
+          next();
+        }
+      : authenticateJWT, celebrationValidationRules('create'), validate, celebrationController.addCelebration);
 
 // #2 the "Put" ROUTE for updating a CELEBRATION selected by celebrationId
-celebrationRoutes.put('/celebrations/:celebrationId', authenticateJWT, IDValidationRules('celebrationId'), celebrationValidationRules('create'), validate, celebrationController.updateCelebration);
+celebrationRoutes.put('/celebrations/:celebrationId',
+    process.env.NODE_ENV === "test" 
+      ? (req: Request, res: Response, next: NextFunction) => {
+          req.user = { id: "mockedUserId", name: "Mocked User", email: "mock@example.com" };
+          next();
+        }
+      : authenticateJWT, IDValidationRules('celebrationId'), celebrationValidationRules('update'), validate, celebrationController.updateCelebration);
 
 // #3 the "Delete" ROUTE for removing a CELEBRATION selected by celebrationId
-celebrationRoutes.delete('/celebrations/:celebrationId', authenticateJWT, IDValidationRules('celebrationId'), celebrationValidationRules('create'), validate, celebrationController.deleteCelebration);
+celebrationRoutes.delete('/celebrations/:celebrationId',
+    process.env.NODE_ENV === "test" 
+      ? (req: Request, res: Response, next: NextFunction) => {
+          req.user = { id: "mockedUserId", name: "Mocked User", email: "mock@example.com" };
+          next();
+        }
+      : authenticateJWT, IDValidationRules('celebrationId'), validate, celebrationController.deleteCelebration);
 // END Basic CRUD Operation Routes ########################################################################################/ 
 
 export default celebrationRoutes;
