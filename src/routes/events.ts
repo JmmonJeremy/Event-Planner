@@ -108,6 +108,39 @@ eventRoutes.delete(
 
 // PUT /events/:eventId - Update an event by ID
 eventRoutes.put(
+  /* #swagger.parameters['body'] = {
+        in: 'body',
+        description: 'Fields to update',
+        required: true,
+         '@schema': {
+          "type": "object",
+          "properties": { 
+            "name": {
+              "type": "string",
+              "example": "any"
+            },      
+            "description": {
+              "type": "string",
+              "example": "any"
+            },
+            "date": {
+              "type": "Date",
+              "example": "YYYY-MM-DDT00:00:00.000Z"
+            },            
+            "location": {
+              "type": "string",
+              "example": "any"
+            },            
+            "userId": {
+              "type": "mongoose.Schema.Types.ObjectId",
+              "example": "any"
+            }            
+          },
+          "required": "email"
+        }
+      }
+    }
+  */
   '/:eventId',
   [...IDValidationRules('eventId'), ...eventValidationRules(), validate],
   async (req: Request, res: Response) => {
