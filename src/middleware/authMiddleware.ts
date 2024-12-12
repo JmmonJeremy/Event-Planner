@@ -64,7 +64,7 @@ async function authenticateJWT(req: Request, res: Response, next: NextFunction):
           });
           console.log("Sending response now...");
           res.status(403).json({ message: 'You are NOT AUTHORIZED because the token has expired' }); // Forbidden if invalid token  
-          // Done to stop the process from haning
+          // Done to stop the process from hanging
           setImmediate(() => {
             const tsNodePath = path.resolve('./node_modules/.bin/ts-node'); // Ensure the correct path to ts-node
             const scriptPath = path.resolve(process.argv[1]); // Path to the current script            
