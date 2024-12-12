@@ -5,20 +5,30 @@
     "description": "Calendar API",
     "version": "1.0.0"
   },
-  "host": "event-planner-nkma.onrender.com",
+  "host": "localhost:3000",
   "basePath": "/",
   "schemes": [
-    "https"
+    "http"
   ],
   "securityDefinitions": {
     "GoogleOAuth2": {
       "type": "oauth2",
       "flow": "implicit",
-      "authorizationUrl": "https://event-planner-nkma.onrender.com/auth/google",
+      "authorizationUrl": "http://localhost:3000/auth/google",
       "description": "Use Google OAuth2 to authenticate <b>Exchange the hidden GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET for JWT_Token.</b>"
     }
   },
   "paths": {
+    "/": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/auth/logout": {
       "post": {
         "description": "",
@@ -281,6 +291,9 @@
           },
           "400": {
             "description": "Bad Request"
+          },
+          "412": {
+            "description": "Precondition Failed"
           }
         }
       }
@@ -300,11 +313,11 @@
           "200": {
             "description": "OK"
           },
-          "400": {
-            "description": "Bad Request"
-          },
           "404": {
             "description": "Not Found"
+          },
+          "412": {
+            "description": "Precondition Failed"
           },
           "500": {
             "description": "Internal Server Error"
@@ -325,11 +338,11 @@
           "200": {
             "description": "OK"
           },
-          "400": {
-            "description": "Bad Request"
-          },
           "404": {
             "description": "Not Found"
+          },
+          "412": {
+            "description": "Precondition Failed"
           },
           "500": {
             "description": "Internal Server Error"
@@ -379,8 +392,17 @@
           }
         ],
         "responses": {
-          "204": {
-            "description": "No Content"
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "412": {
+            "description": "Precondition Failed"
           }
         }
       }

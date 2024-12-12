@@ -119,9 +119,9 @@ app.use((req: Request, res: Response, next: NextFunction) => {
     console.log("Database connected.");
 
     // Routes
-    app.get("/", (req: Request, res: Response) => {
-      res.send("Welcome to the API! Documentation available at /api-docs");
-    });
+    // app.get("/", (req: Request, res: Response) => {
+    //   res.send("Welcome to the API! Documentation available at /api-docs");
+    // });
     app.use("/", routes);
     app.use("/api-docs", 
       swaggerUi.serve, 
