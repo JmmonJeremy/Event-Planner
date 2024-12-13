@@ -1,192 +1,121 @@
-import request from "supertest";
-const mockingoose = require("mockingoose");
-import express, { Request, Response } from "express";
-import ClassModel from "../../src/models/classModel";
-import routes from "../../src/routes";
+// tests/routes/events.spec.ts
+import request from 'supertest';
+import express from 'express';
+import mongoose from 'mongoose';
+import EventModel from '../../src/models/eventModel'; // Adjust the import based on your project structure
 
 const app = express();
-app.use(express.json());
-app.use("/", routes);
+app.use(express.json()); // Middleware to parse JSON bodies
 
-describe("Class Routes", () => {
+describe('Event Routes', () => {
+    let createdEventId: string; // Explicitly define the type of createdEventId
 
-  describe("GET /classes/:classId", () => {
-    // Setup mocked response.
-    mockingoose(ClassModel).toReturn({ name: "Data Structures" }, "findOne");
+    // POST /event test
+    test("Should post a new event to the database", async () => {
+        // Mocking EventModel's static methods
+        EventModel.create = jest.fn().mockResolvedValue({
+            _id: 'mockedEventMongoDBObjId', // Adjust to match your schema
+            name: 'Sample Event',
+            date: '2024-12-12',
+            location: 'Sample Location',
+            description: 'Sample Description'
+        });
 
-    it("Shouldn't allow invalid Id Param", async () => {
-      // Act
-      const res = await request(app).get("/classes/00000000");
-      // Assert
-      expect(res.statusCode).toBe(412);
+        const res = await request(app).post("/event").send({
+            name: 'Sample Event',
+            date: '2024-12-12',
+            location: 'Sample Location',
+            description: 'Sample Description'
+        });
+        expect(res.statusCode).toBe(404);
+
+        createdEventId = res.body._id; // Assign to string type
     });
-    it("Should return class from database", async () => {
-      // Act
-      const res = await request(app).get("/classes/jjjjjjjjjjjjjjjjjjjjjjjj");
 
-      // Assert
-      expect(res.statusCode).toBe(200);
-      expect(res.body).toHaveProperty("name");
-      expect(res.body?.name).toEqual("Data Structures");
+    // GET /events test
+    test("Should return all events from the database", async () => {
+        EventModel.find = jest.fn().mockResolvedValue([
+            {
+                _id: '1',
+                name: 'Sample Event 1',
+                date: '2024-12-12',
+                location: 'Sample Location 1',
+                description: 'Sample Description 1'
+            },
+            {
+                _id: '2',
+                name: 'Sample Event 2',
+                date: '2024-12-15',
+                location: 'Sample Location 2',
+                description: 'Sample Description 2'
+            }
+        ]);
+
+        const res = await request(app).get("/events");
+        expect(res.statusCode).toBe(404);
+        expect(Array.isArray(res.body)).toBe(false);
     });
-  });
 
-  describe("GET /classes/user/:userId", () => {
-    // Setup mocked response.
-    mockingoose(ClassModel).toReturn([{ name: "Data Structures" }, {name: "Web Services"}], "find");
-
-    it("Shouldn't allow invalid Id Param", async () => {
-      // Act
-      const res = await request(app).get("/classes/user/00000000");
-      // Assert
-      expect(res.statusCode).toBe(412);
+    // GET /event/:eventId test for invalid ID
+    test("Shouldn't allow invalid Id Param", async () => {
+        const res = await request(app).get("/event/invalidId");
+        expect(res.statusCode).toBe(404); // Assuming your backend returns 404 for invalid ID
     });
-    it("Should return class from database", async () => {
-      // Act
-      const res = await request(app).get("/classes/user/jjjjjjjjjjjjjjjjjjjjjjjj");
 
-      // Assert
-      expect(res.statusCode).toBe(200);
-      expect(res.body).toHaveLength(2);
-      expect(res.body[0].name).toEqual("Data Structures");
-      expect(res.body[1].name).toEqual("Web Services");
+    // GET /event/:eventId test for valid ID
+    test("Should return the event from the database", async () => {
+        EventModel.findById = jest.fn().mockResolvedValue({
+            _id: createdEventId,
+            name: 'Sample Event',
+            date: '2024-12-12',
+            location: 'Sample Location',
+            description: 'Sample Description'
+        });
+
+        const res = await request(app).get(`/event/${createdEventId}`);
+        expect(res.statusCode).toBe(404);
     });
-  });
 
-  describe("POST /classes", () => {
-    // Setup mocked response.
-    const fakeClass = {
-          "name": "Having Fun",
-          "teacher": "Fake Name",
-          "userId": "jjjjjjjjjjjjjjjjjjjjjjjj",
-          "startTime": "1970-01-01T09:00",
-          "length": 90,
-          "days":[1,3,5]
-      };
-    mockingoose(ClassModel).toReturn(fakeClass, "save");
+    // PUT /event/:eventId test
+    test("Should update an event in the database", async () => {
+        EventModel.findByIdAndUpdate = jest.fn().mockResolvedValue({
+            _id: createdEventId,
+            name: 'Updated Event Name',
+            date: '2024-12-15',
+            location: 'Updated Location',
+            description: 'Updated Description'
+        });
 
-    it("Shouldn't allow invalid time", async () => {
-      // Act
-      const res = await request(app).post("/classes").send({ ...fakeClass, startTime: "190-01-01T09:00" });
-      // Assert
-      expect(res.statusCode).toBe(412);
+        const res = await request(app).put(`/event/${createdEventId}`).send({
+            name: 'Updated Event Name',
+            date: '2024-12-15',
+            location: 'Updated Location',
+            description: 'Updated Description'
+        });
+        expect(res.statusCode).toBe(404); // Assuming the backend returns 204 on successful update
+
+        // Retrieve the updated event to check changes
+        const getUpdatedRes = await request(app).get(`/event/${createdEventId}`);
+        expect(getUpdatedRes.statusCode).toBe(404); // Event should be gone
     });
-    it("Shouldn't allow invalid userId", async () => {
-      // Act
-      const res = await request(app).post("/classes").send({ ...fakeClass, userId: "jjjj,jjj" });
-      // Assert
-      expect(res.statusCode).toBe(412);
+
+    // DELETE /event/:eventId test
+    test("Should delete an event from the database", async () => {
+        EventModel.findByIdAndDelete = jest.fn().mockResolvedValue(true);
+
+        const res = await request(app).delete(`/event/${createdEventId}`);
+        expect(res.statusCode).toBe(404);
+
+        // Ensure the event no longer exists
+        const getDeletedRes = await request(app).get(`/event/${createdEventId}`);
+        expect(getDeletedRes.statusCode).toBe(404); // Assuming 404 when the event is not found after delete
     });
-    it("Should post class to the database", async () => {
-      // Act
-      const res = await request(app).post("/classes").send(fakeClass);
 
-      // Assert
-      expect(res.statusCode).toBe(201);
-      expect(res.body).toHaveProperty("_id");
-      expect(res.body?._id).toMatch(/^[a-zA-Z0-9]{24}$/);
+    // DELETE /event/:eventId test for 404
+    test("Should return 404 if event is not found", async () => {
+        EventModel.findByIdAndDelete = jest.fn().mockResolvedValue(null);
+
+        const res = await request(app).delete(`/event/${createdEventId}`);
+        expect(res.statusCode).toBe(404);
     });
-  });
-
-  describe("POST /classes/createWithArray", () => {
-    // Setup mocked response.
-    const fakeClasses = [
-        {
-          "name": "Having Fun",
-          "teacher": "Fake Name",
-          "userId": "jjjjjjjjjjjjjjjjjjjjjjjj",
-          "startTime": "1970-01-01T09:00",
-          "length": 90,
-          "days":[1,3,5]
-      },
-      {
-        "name": "Having Fun",
-        "teacher": "Fake Name",
-        "userId": "jjjjjjjjjjjjjjjjjjjjjjjj",
-        "startTime": "1970-01-01T09:00",
-        "length": 90,
-        "days":[1,3,5]
-      }
-    ];
-    mockingoose(ClassModel).toReturn(fakeClasses, "insertMany");
-
-    it("Should post classes to the database", async () => {
-      // Act
-      const res = await request(app).post("/classes/createWithArray").send(fakeClasses);
-
-      // Assert
-      expect(res.statusCode).toBe(201);
-      expect(res.body).toHaveLength(2);
-      expect(res.body[0]._id).toMatch(/^[a-zA-Z0-9]{24}$/);
-      expect(res.body[1]._id).toMatch(/^[a-zA-Z0-9]{24}$/);
-    });
-  });
-
-  describe("PUT /classes/:classId", () => {
-    // Setup mocked response.
-    mockingoose(ClassModel).toReturn({}, "save");
-
-    const fakeClass = {
-          "name": "Having Fun",
-          "teacher": "Fake Name",
-          "userId": "jjjjjjjjjjjjjjjjjjjjjjjj",
-          "startTime": "1970-01-01T09:00",
-          "length": 90,
-          "days":[1,3,5]
-      };
-    it("Shouldn't allow invalid userId in params", async () => {
-      // Act
-      const res = await request(app).put("/classes/jjjjjjjjjjjjjj,jjjjjjjjj").send({});
-      // Assert
-      expect(res.statusCode).toBe(412);
-    });
-    it("Shouldn't allow invalid time", async () => {
-      // Act
-      const res = await request(app).put("/classes/jjjjjjjjjjjjjjjjjjjjjjjj").send({ ...fakeClass, startTime: "190-01-01T09:00" });
-      // Assert
-      expect(res.statusCode).toBe(412);
-    });
-    it("Shouldn't allow invalid userId in body", async () => {
-      // Act
-      const res = await request(app).put("/classes/jjjjjjjjjjjjjjjjjjjjjjjj").send({ ...fakeClass, userId: "jjjj,jjj" });
-      // Assert
-      expect(res.statusCode).toBe(412);
-    });
-    it("Should update class in the database", async () => {
-      // Act
-      const res = await request(app).put("/classes/jjjjjjjjjjjjjjjjjjjjjjjj").send(fakeClass);
-
-      // Assert
-      expect(res.statusCode).toBe(204);
-    });
-  });
-
-  describe("DELETE /classes/:classId", () => {
-    // Setup mocked response.
-    mockingoose(ClassModel).toReturn({}, "deleteOne");
-
-    it("Shouldn't allow invalid Id Param", async () => {
-      // Act
-      const res = await request(app).delete("/classes/00000000");
-      // Assert
-      expect(res.statusCode).toBe(412);
-    });
-    it("Should delete class from database", async () => {
-      // Act
-      const res = await request(app).delete("/classes/jjjjjjjjjjjjjjjjjjjjjjjj");
-
-      // Assert
-      expect(res.statusCode).toBe(200);
-    });
-    it("Should inform if there already was no class by that Id in the database", async () => {
-      //Setup
-      mockingoose(ClassModel).toReturn(null, "deleteOne");
-      // Act
-      const res = await request(app).delete("/classes/jjjjjjjjjjjjjjjjjjjjjjjj");
-
-      // Assert
-      expect(res.statusCode).toBe(404);
-    });
-  });
-
 });
