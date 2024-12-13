@@ -1,79 +1,166 @@
-import { Router, Request, Response } from 'express';
-import { body, validationResult } from 'express-validator';
-import EventModel from '../models/eventModel'; // Adjust this path as needed
-import { validate, eventValidationRules } from '../config/validator'; // Adjust this path as needed
+import { Request, Response, Router } from 'express';
+import EventModel from '../models/eventModel';
+import mongoose from 'mongoose';
+import { validate, IDValidationRules } from '../config/validator';
+import { body } from 'express-validator';
 
 const eventRoutes = Router();
 
-// POST route to create a new event
-eventRoutes.post('/', eventValidationRules('create'), validate, async (req: Request, res: Response) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-      res.status(400).json({ errors: errors.array() });
-  }
+// Validation rules specific to events
+const eventValidationRules = () => [
+  body('name').isString().notEmpty().withMessage('Name is required and must be a string.'),
+  body('description')
+    .isString()
+    .notEmpty()
+    .withMessage('Description is required and must be a string.'),
+  body('date')
+    .isISO8601()
+    .withMessage('Date must be a valid ISO8601 date string.')
+    .toDate(),
+  body('location')
+    .isString()
+    .notEmpty()
+    .withMessage('Location is required and must be a string.'),
+  body('userId')
+    .matches(/^[a-fA-F0-9]{24}$/)
+    .withMessage('UserId must be a valid MongoDB ObjectId.')
+];
 
-  try {
-      const newEvent = new EventModel(req.body);
-      await newEvent.save(); // Ensure this is correctly saving to the database
-      res.status(201).json(newEvent);
-  } catch (error) {
-      res.status(500).json({ message: 'Error creating event', error });
-  }
-});
-
-
-// GET route to return all events
+// GET /events - Get all events
 eventRoutes.get('/', async (req: Request, res: Response) => {
-    try {
-        const events = await EventModel.find();
-        res.status(200).json(events);
-    } catch (error) {
-        res.status(500).json({ message: 'Error fetching events', error });
-    }
+  try {
+    const events = await EventModel.find(); // Retrieve all events from the database
+    res.json(events); // Return the events
+  } catch (error) {
+    console.error('Error fetching events:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
 });
 
-// GET route to return a specific event by ID
-eventRoutes.get('/:eventId', async (req: Request, res: Response) => {
+// GET /events/:eventId - Get a specific event by ID
+eventRoutes.get(
+  '/:eventId',
+  [...IDValidationRules('eventId'), validate],
+  async (req: Request, res: Response) => {
+    const eventId = req.params.eventId;
+
     try {
-        const event = await EventModel.findById(req.params.eventId);
-        if (!event) {
-            res.status(404).json({ message: 'Event not found' });
+      const event = await EventModel.findById(eventId); // Find event by ID
+      if (!event) {
+        res.status(404).json({ message: 'Event not found' });
+      }
+      res.json(event); // Return the event
+    } catch (error) {
+      console.error('Error fetching event:', error);
+      res.status(500).json({ message: 'Internal Server Error' });
+    }
+  }
+);
+
+// POST /events - Create a new event
+eventRoutes.post(
+  '/',
+  [...eventValidationRules(), validate],
+  async (req: Request, res: Response) => {
+    const { name, description, date, location, userId } = req.body;
+
+    try {
+      const newEvent = new EventModel({
+        name,
+        description,
+        date,
+        location,
+        userId,
+      });
+
+      await newEvent.save();
+
+      res.status(201).json({
+        message: 'Event created successfully',
+        event: newEvent,
+      });
+    } catch (error) {
+      console.error('Error creating event:', error);
+      res.status(400).json({ message: 'Bad Request' });
+    }
+  }
+);
+
+// DELETE /events/:eventId - Delete a specific event by ID
+eventRoutes.delete(
+  '/:eventId',
+  [...IDValidationRules('eventId'), validate],
+  async (req: Request, res: Response) => {
+    const eventId = req.params.eventId;
+
+    try {
+      const deletedEvent = await EventModel.findByIdAndDelete(eventId); // Find and delete the event
+      if (!deletedEvent) {
+        res.status(404).json({ message: 'Event not found' });
+      }
+      res.json({ message: 'Event deleted successfully', event: deletedEvent }); // Return the deleted event
+    } catch (error) {
+      console.error('Error deleting event:', error);
+      res.status(500).json({ message: 'Internal Server Error' });
+    }
+  }
+);
+
+// PUT /events/:eventId - Update an event by ID
+eventRoutes.put(
+  /* #swagger.parameters['body'] = {
+        in: 'body',
+        description: 'Fields to update',
+        required: true,
+         '@schema': {
+          "type": "object",
+          "properties": { 
+            "name": {
+              "type": "string",
+              "example": "any"
+            },      
+            "description": {
+              "type": "string",
+              "example": "any"
+            },
+            "date": {
+              "type": "Date",
+              "example": "YYYY-MM-DDT00:00:00.000Z"
+            },            
+            "location": {
+              "type": "string",
+              "example": "any"
+            },            
+            "userId": {
+              "type": "mongoose.Schema.Types.ObjectId",
+              "example": "any"
+            }            
+          },
+          "required": "email"
         }
-        res.status(200).json(event);
-    } catch (error) {
-        res.status(500).json({ message: 'Error fetching event', error });
+      }
     }
-});
-
-// PUT route to update an existing event
-eventRoutes.put('/:eventId', eventValidationRules('update'), validate, async (req: Request, res: Response) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        res.status(400).json({ errors: errors.array() });
-    }
+  */
+  '/:eventId',
+  [...IDValidationRules('eventId'), ...eventValidationRules(), validate],
+  async (req: Request, res: Response) => {
+    const eventId = req.params.eventId;
 
     try {
-        const updatedEvent = await EventModel.findByIdAndUpdate(req.params.eventId, req.body, { new: true });
-        if (!updatedEvent) {
-            res.status(404).json({ message: 'Event not found' });
-        }
-        res.status(204).send(); // Assuming a 204 No Content status for successful updates
-    } catch (error) {
-        res.status(500).json({ message: 'Error updating event', error });
-    }
-});
+      const updatedEvent = await EventModel.findByIdAndUpdate(eventId, req.body, {
+        new: true,
+        runValidators: true,
+      });
 
-// DELETE route to remove an event from the database
-eventRoutes.delete('/:eventId', async (req: Request, res: Response) => {
-    try {
-        const deletedEvent = await EventModel.findByIdAndDelete(req.params.eventId);
-        if (!deletedEvent) {
-            res.status(404).json({ message: 'Event not found' });
-        }
-        res.status(200).json({ message: 'Event deleted successfully' });
+      if (!updatedEvent) {
+        res.status(404).json({ message: 'Event not found' });
+      }
+      res.json({ message: 'Event updated successfully', event: updatedEvent }); // Return the updated event
     } catch (error) {
-        res.status(500).json({ message: 'Error deleting event', error });
+      console.error('Error updating event:', error);
+      res.status(400).json({ message: 'Bad Request' });
     }
-});
+  }
+);
 
 export default eventRoutes;
