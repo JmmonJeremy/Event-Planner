@@ -1,9 +1,6 @@
 import { body, param, validationResult } from "express-validator";
 import { Request, Response, NextFunction } from "express";
 
-
-
-
 // Goal validation rules for an array of non-empty strings
 export const goalValidationRules = (useCase: string) => { 
 
@@ -59,8 +56,7 @@ export const goalValidationRules = (useCase: string) => {
   
   }; 
 
-
-
+// Validation rules for class
 export const classValidationRules = () => {
   return [
     body("startTime")
@@ -74,25 +70,75 @@ export const classValidationRules = () => {
       ),
   ];
 };
-
-const fieldValidationRules = (fieldName: string, useCase: string, maxLength: number) => {
-  const capitalizedFieldName = fieldName.charAt(0).toUpperCase() + fieldName.slice(1); // Capitalize the first letter
+// Validation rules for events
+export const eventValidationRules = (useCase: string) => {
   return [
-    body(fieldName)
-      .if((value, { req }) => useCase === 'update') // For 'update'
-      .optional() // Applies only to 'update'
-      .trim() 
-      .notEmpty().withMessage(`${capitalizedFieldName} cannot be empty`) 
-      .isLength({ max: maxLength }).withMessage(`${capitalizedFieldName} can't exceed 128 characters`),
-    body(fieldName)
-      .if((value, { req }) => useCase === 'create') // For 'create'
-      .exists().withMessage(`${capitalizedFieldName} is required`) // Applies only to 'create'
+    // Name validation
+    body("name")
+      .if((value, { req }) => useCase === 'create') // Only apply this rule on creation
+      .exists().withMessage("Name is required")
       .trim()
-      .notEmpty().withMessage(`${capitalizedFieldName} cannot be empty`)
-      .isLength({ max: maxLength }).withMessage(`${capitalizedFieldName} can't exceed 128 characters`),
+      .notEmpty().withMessage("Name cannot be empty")
+      .isLength({ max: 128 }).withMessage("Name can't exceed 128 characters"),
+
+    // Description validation
+    body("description")
+      .if((value, { req }) => useCase === 'create') // Only apply this rule on creation
+      .exists().withMessage("Description is required")
+      .trim()
+      .notEmpty().withMessage("Description cannot be empty")
+      .isLength({ max: 512 }).withMessage("Description can't exceed 512 characters"),
+
+    // Date validation
+    body("date")
+      .if((value, { req }) => useCase === 'create') // Only apply this rule on creation
+      .exists().withMessage("Date is required")
+      .custom(validateDate) // Custom date validation function to check for valid formats
+      .withMessage('Invalid date format'),  
+
+    // Location validation
+    body("location")
+      .if((value, { req }) => useCase === 'create') // Only apply this rule on creation
+      .optional()
+      .trim()
+      .isLength({ max: 200 }).withMessage("Location can't exceed 200 characters"),
+
+    // Participants validation (optional for both create and update)
+    body("participants")
+      .optional()
+      .isArray().withMessage('The field must be an array')
+      .custom((value) => {
+        if (!Array.isArray(value) || value.length === 0) {
+          throw new Error('Array cannot be empty');
+        }
+        if (!value.every((item: string) => typeof item === 'string' && item.trim() !== '')) {
+          throw new Error('Each element in the array must be a non-empty string');
+        }
+        return true;
+      }),
   ];
 };
 
+// Helper function to generate field-specific validation rules
+const fieldValidationRules = (fieldName: string, useCase: string, maxLength: number) => {
+  const capitalizedFieldName = fieldName.charAt(0).toUpperCase() + fieldName.slice(1);
+  return [
+    body(fieldName)
+      .if((value, { req }) => useCase === 'update')
+      .optional()
+      .trim()
+      .notEmpty().withMessage(`${capitalizedFieldName} cannot be empty`)
+      .isLength({ max: maxLength }).withMessage(`${capitalizedFieldName} can't exceed ${maxLength} characters`),
+    body(fieldName)
+      .if((value, { req }) => useCase === 'create')
+      .exists().withMessage(`${capitalizedFieldName} is required`)
+      .trim()
+      .notEmpty().withMessage(`${capitalizedFieldName} cannot be empty`)
+      .isLength({ max: maxLength }).withMessage(`${capitalizedFieldName} can't exceed ${maxLength} characters`),
+  ];
+};
+
+// Validation rules for users
 export const userValidationRules = (useCase: string) => {
   return [
     body("googleId")
@@ -100,18 +146,17 @@ export const userValidationRules = (useCase: string) => {
       .matches(/^[0-9a-zA-Z]{1,255}$/).withMessage("Google ID must be alphanumeric and between 1 and 255 characters"),
     ...fieldValidationRules("name", useCase, 100),
     body("email")
-      .if((value, { req }) => useCase === 'update') // For 'update'
-      .optional() // Applies only to 'update'
-      .trim()    
+      .if((value, { req }) => useCase === 'update')
+      .optional()
+      .trim()
       .notEmpty().withMessage("Email cannot be empty")
       .isEmail().withMessage("Invalid email format"),
     body("email")
-      .if((value, { req }) => useCase === 'create') // For 'create'
-      .exists().withMessage("Email is required") // Applies only to 'create'
-      .trim()    
+      .if((value, { req }) => useCase === 'create')
+      .exists().withMessage("Email is required")
+      .trim()
       .notEmpty().withMessage("Email cannot be empty")
       .isEmail().withMessage("Invalid email format"),
-  
     body("password")
       .optional()
       .trim()
@@ -119,62 +164,57 @@ export const userValidationRules = (useCase: string) => {
       .isLength({ min: 6, max: 128 }).withMessage("Password must be between 6 and 128 characters long")
       .matches(/^\S*$/).withMessage("Password must not contain spaces")
       .matches(/(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[#@$!%*?&])/)
-      .withMessage("Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character")    
+      .withMessage("Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character")
   ];
 };
 
+// Custom date validation
 const validateDate = (value: string) => {
   const formats = [
-    /^\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s\d{1,2},\s\d{2,4}\b/, // Example: Dec 12, 2024
-    /^\b(?:January|February|March|April|May|June|July|August|September|October|November|December)\s\d{1,2},\s\d{2,4}\b/, // Example: December 12, 2024
-    /^\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}$/, // Example: 12/12/2024 or 12-12-2024
-    /^\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2}$/, // Example: 12/12/24 or 12-12-24
+    /^\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s\d{1,2},\s\d{2,4}\b/,
+    /^\b(?:January|February|March|April|May|June|July|August|September|October|November|December)\s\d{1,2},\s\d{2,4}\b/,
+    /^\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}$/,
+    /^\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2}$/
   ];
 
   const isValidFormat = formats.some(format => format.test(value));
   
-  if (!isValidFormat) {
-    return false;  // Return false to indicate validation failure
-  }
-
-  return true; // Return true if valid
+  return isValidFormat;
 };
 
+// Validation rules for celebrations
 export const celebrationValidationRules = (useCase: string) => {
   return [
     ...fieldValidationRules("person", useCase, 200),
     ...fieldValidationRules("occasion", useCase, 100),
     ...fieldValidationRules("plan", useCase, 512),
     body("user")
-      .if((value, { req }) => useCase === 'create') // For 'create'
-      .exists().withMessage("User is required") // Applies only to 'create'    
+      .if((value, { req }) => useCase === 'create')
+      .exists().withMessage("User is required")
       .matches(/^[a-zA-Z0-9]{24}$/)
-      .withMessage(`Your user was not a valid MongoDB ID`),
+      .withMessage("Your user was not a valid MongoDB ID"),
     body("user")
-      .if((value, { req }) => useCase === 'update') // For 'update'
-      .optional() // Applies only to 'update'      
+      .if((value, { req }) => useCase === 'update')
+      .optional()
       .matches(/^[a-zA-Z0-9]{24}$/)
-      .withMessage(`Your user was not a valid MongoDB ID`), 
+      .withMessage("Your user was not a valid MongoDB ID"),
     body('date')
-      .if((value, { req }) => useCase === 'create') // For 'create'
-      .exists().withMessage("Date is required") // Applies only to 'create'      
-      .custom(validateDate) // Custom date validation
+      .if((value, { req }) => useCase === 'create')
+      .exists().withMessage("Date is required")
+      .custom(validateDate)
       .withMessage('Invalid date format'),  
     body('date')
-      .if((value, { req }) => useCase === 'update') // For 'update'
-      .optional() // Applies only to 'update'       
-      .custom(validateDate) // Custom date validation
+      .if((value, { req }) => useCase === 'update')
+      .optional()
+      .custom(validateDate)
       .withMessage('Invalid date format'),  
-    // Validator for an array of strings
     body('othersInvolved')
       .optional()
-      .isArray().withMessage('The field must be an array')  // Check if it's an array
+      .isArray().withMessage('The field must be an array')
       .custom((value) => {
-        // Check if the array is not empty
         if (!Array.isArray(value) || value.length === 0) {
           throw new Error('Array cannot be empty');
         }
-        // Check if all elements in the array are strings
         if (!value.every((item: string) => typeof item === 'string' && item.trim() !== '')) {
           throw new Error('Each element in the array must be a non-empty string');
         }
@@ -182,20 +222,22 @@ export const celebrationValidationRules = (useCase: string) => {
       }),
     body('visibility')
       .isIn(['Private', 'Public']).withMessage('Visibility must be either "Private" or "Public"')
-      .optional() // optional because it has a default value
-      .default('Public') // setting default value if not provided
+      .optional()
+      .default('Public')
   ];
 };
 
-// A validator for whether an ID is a valid MongoDB Id. Pass the name of the parameter which should be a MongoDB Id
-export const IDValidationRules = (idName : string) => {
+
+// Validation rules for MongoDB ID
+export const IDValidationRules = (idName: string) => {
   return [
     param(idName)
       .matches(/^[a-zA-Z0-9]{24}$/)
-      .withMessage(`Your ${idName} was not a valid MongoDB ID`),
-  ]
-}
+      .withMessage(`Your ${idName} was not a valid MongoDB ID`)
+  ];
+};
 
+// Middleware to validate request
 export const validate = (
   req: Request,
   res: Response,
@@ -203,7 +245,6 @@ export const validate = (
 ): void => {
   const errors = validationResult(req);
 
-  // If validation succeeded, move to next middleware. Otherwise, return a list of failures.
   if (errors.isEmpty()) {
     next();
   } else {

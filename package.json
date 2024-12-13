@@ -36,6 +36,7 @@
     "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
+    "@jest/globals": "^29.7.0",
     "@types/connect-mongodb-session": "^2.4.7",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",

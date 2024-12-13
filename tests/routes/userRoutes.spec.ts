@@ -10,7 +10,7 @@ app.use("/", routes);
 
 describe("User Routes", () => {
 // #1 Get all users tests ****************************************************************************
-  describe("GET /users", () => {
+  describe("GET /users -JT", () => {
     // Setup mocked response.
     mockingoose(UserModel).toReturn([{ name: "John Doe", email: "example@example.com" }], "find");
     // Test success case for getting all users from the database
