@@ -108,6 +108,8 @@ export const update = async (req: Request, res: Response) => {
   }
 };
 
+
+
 export const deleteGoal = async (req: Request, res: Response) => {
   try {
     const deletedGoal = await GoalModel.findByIdAndDelete(req.params.goalId);

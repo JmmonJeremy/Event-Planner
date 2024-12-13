@@ -281,6 +281,9 @@
           },
           "400": {
             "description": "Bad Request"
+          },
+          "412": {
+            "description": "Precondition Failed"
           }
         }
       }
@@ -300,11 +303,11 @@
           "200": {
             "description": "OK"
           },
-          "400": {
-            "description": "Bad Request"
-          },
           "404": {
             "description": "Not Found"
+          },
+          "412": {
+            "description": "Precondition Failed"
           },
           "500": {
             "description": "Internal Server Error"
@@ -325,11 +328,11 @@
           "200": {
             "description": "OK"
           },
-          "400": {
-            "description": "Bad Request"
-          },
           "404": {
             "description": "Not Found"
+          },
+          "412": {
+            "description": "Precondition Failed"
           },
           "500": {
             "description": "Internal Server Error"
@@ -379,44 +382,80 @@
           }
         ],
         "responses": {
-          "204": {
-            "description": "No Content"
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "412": {
+            "description": "Precondition Failed"
           }
         }
       }
     },
     "/goals": {
       "post": {
-        "description": "",
+        "summary": "Creates a new goal",
+        "description": "Saves a new goal into the database.",
         "parameters": [
           {
             "name": "body",
             "in": "body",
+            "description": "Request body",
+            "required": true,
             "schema": {
               "type": "object",
               "properties": {
-                "userId": {
-                  "example": "any"
-                },
                 "name": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "Solar Panel Installation"
                 },
                 "description": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "Complete installation of the solar panel system."
                 },
                 "dueDate": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "2024-12-31"
+                },
+                "userId": {
+                  "type": "string",
+                  "example": "55532c284e8d64fbf0ea178f"
                 }
-              }
+              },
+              "required": [
+                "name",
+                "userId"
+              ]
             }
           }
         ],
         "responses": {
           "201": {
-            "description": "Created"
+            "description": "SUCCESS, POST   a new goal"
           },
           "400": {
-            "description": "Bad Request"
+            "description": "BAD REQUEST your POST was attempted with forbidden entries"
+          },
+          "412": {
+            "description": "The PRECONDITION FAILED in the validation of the user data"
+          },
+          "500": {
+            "description": "There was an INTERNAL SERVER ERROR while trying to POST the goal"
+          }
+        }
+      }
+    },
+    "/goals/createWithArray": {
+      "post": {
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
           }
         }
       }
@@ -436,6 +475,12 @@
           "200": {
             "description": "OK"
           },
+          "404": {
+            "description": "Not Found"
+          },
+          "412": {
+            "description": "Precondition Failed"
+          },
           "500": {
             "description": "Internal Server Error"
           }
@@ -449,29 +494,17 @@
             "in": "path",
             "required": true,
             "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "example": "any"
-                },
-                "description": {
-                  "example": "any"
-                },
-                "dueDate": {
-                  "example": "any"
-                }
-              }
-            }
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "412": {
+            "description": "Precondition Failed"
           },
           "500": {
             "description": "Internal Server Error"
@@ -492,6 +525,12 @@
           "200": {
             "description": "OK"
           },
+          "404": {
+            "description": "Not Found"
+          },
+          "412": {
+            "description": "Precondition Failed"
+          },
           "500": {
             "description": "Internal Server Error"
           }
@@ -500,7 +539,8 @@
     },
     "/goals/user/{userId}": {
       "get": {
-        "description": "",
+        "summary": "GET goals by their user's _id",
+        "description": "The selected goals are displayed.",
         "parameters": [
           {
             "name": "userId",
@@ -511,10 +551,16 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "SUCCESS, GET Retrieved the selected goals"
+          },
+          "404": {
+            "description": "The attempted GET of the selected goals was Not Found"
+          },
+          "412": {
+            "description": "The PRECONDITION FAILED in the validation of the _id PARAMETER"
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "There was an INTERNAL SERVER ERROR while trying to GET the selected goals"
           }
         }
       }
