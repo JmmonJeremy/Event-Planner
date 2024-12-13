@@ -11,7 +11,7 @@ jest.mock('passport', () => ({
   }),
 }));
 
-describe('GET /auth/google', () => {
+describe('Google Request -JT', () => {
   let app: express.Application;
 
   beforeAll(() => {
@@ -27,3 +27,5 @@ describe('GET /auth/google', () => {
     expect(passport.authenticate).toHaveBeenCalledWith('google', { scope: ['profile', 'email'] });    
   });
 });
+
+

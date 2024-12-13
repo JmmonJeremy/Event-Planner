@@ -11,6 +11,7 @@ import { connectDB } from "./config/database";
 import swaggerUi from "swagger-ui-express";
 import { SwaggerUiOptions } from 'swagger-ui-express';
 import swaggerDocument from "../swagger-output.json"; // Path to the generated Swagger JSON file
+import path from 'path';
 
 const MongoDBStore = connectMongoDBSession(session);
 
@@ -101,7 +102,8 @@ app.use(session({
 
 // Initialize Passport and enable persistent login sessions
 app.use(passport.initialize())
-.use(passport.session()); // This is needed for persistent login sessions
+.use(passport.session()) // This is needed for persistent login sessions
+.use(express.static(path.join(__dirname, 'public')));
 
 app.use((req: Request, res: Response, next: NextFunction) => {
   // Allow CORS for all domains !!!!!!!!!! WOULDN'T WORK ON RENDER WITHOUT THIS !!!!!!!!!!  
