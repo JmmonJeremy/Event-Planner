@@ -3,9 +3,11 @@ import request from 'supertest';
 import express from 'express';
 import mongoose from 'mongoose';
 import EventModel from '../../src/models/eventModel'; // Adjust the import based on your project structure
+import routes from "../../src/routes";
 
 const app = express();
-app.use(express.json()); // Middleware to parse JSON bodies
+app.use(express.json());
+app.use("/", routes);
 
 describe('Event Routes', () => {
     let createdEventId: string; // Explicitly define the type of createdEventId
@@ -52,8 +54,8 @@ describe('Event Routes', () => {
         ]);
 
         const res = await request(app).get("/events");
-        expect(res.statusCode).toBe(404);
-        expect(Array.isArray(res.body)).toBe(false);
+        expect(res.statusCode).toBe(200);
+        expect(Array.isArray(res.body)).toBe(true);
     });
 
     // GET /event/:eventId test for invalid ID
