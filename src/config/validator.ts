@@ -1,6 +1,44 @@
 import { body, param, validationResult } from "express-validator";
 import { Request, Response, NextFunction } from "express";
 
+
+
+
+// Goal validation rules for an array of non-empty strings
+export const goalValidationRules = (useCase: string) => {
+  return [
+    body("goals")
+      .if((value, { req }) => useCase === 'create') // Only apply for create
+      .exists().withMessage("Goals are required") // Ensure goals field exists in 'create'
+      .isArray().withMessage("Goals must be an array") // Check if it’s an array
+      .custom((value) => {
+        if (!Array.isArray(value) || value.length === 0) {
+          throw new Error('Goals array cannot be empty');
+        }
+        if (!value.every((item: string) => typeof item === 'string' && item.trim() !== '')) {
+          throw new Error('Each goal must be a non-empty string');
+        }
+        return true;
+      }),
+    body("goals")
+      .if((value, { req }) => useCase === 'update') // Apply for update as well
+      .optional() // Make it optional for updates
+      .isArray().withMessage("Goals must be an array") // Ensure the field is an array
+      .custom((value) => {
+        if (value && value.length === 0) {
+          throw new Error('Goals array cannot be empty');
+        }
+        if (value && !value.every((item: string) => typeof item === 'string' && item.trim() !== '')) {
+          throw new Error('Each goal must be a non-empty string');
+        }
+        return true;
+      }),
+  ];
+};
+
+
+
+
 export const classValidationRules = () => {
   return [
     body("startTime")
