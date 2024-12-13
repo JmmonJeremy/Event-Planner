@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import authRoutes from './authRoutes';
 import userRoutes from './userRoutes';
-import eventRoutes from './events';
+import eventRoutes from './eventRoutes';
 import goalRoutes from './goals';
 import classRoutes from './classRoutes';
 import celebrationRoutes from './celebrationRoutes';
