@@ -1,6 +1,61 @@
 import { body, param, validationResult } from "express-validator";
 import { Request, Response, NextFunction } from "express";
 
+// Goal validation rules for an array of non-empty strings
+export const goalValidationRules = (useCase: string) => { 
+
+    return [ 
+  
+      ...fieldValidationRules("name", useCase, 100), 
+  
+      ...fieldValidationRules("description", useCase, 1000), 
+  
+      body('dueDate') 
+  
+        .if((value, { req }) => useCase === 'create') // For 'create' 
+  
+        .exists().withMessage("Date is required") // Applies only to 'create'       
+  
+        .custom(validateDate) // Custom date validation 
+  
+        .withMessage('Invalid date format'),   
+  
+      body('dueDate') 
+  
+        .if((value, { req }) => useCase === 'update') // For 'update' 
+  
+        .optional() // Applies only to 'update'        
+  
+        .custom(validateDate) // Custom date validation 
+  
+        .withMessage('Invalid date format'),  
+  
+      body("userId") 
+  
+        .if((value, { req }) => useCase === 'create') // For 'create' 
+  
+        .exists().withMessage("User is required") // Applies only to 'create'     
+  
+        .matches(/^[a-zA-Z0-9]{24}$/) 
+  
+        .withMessage(`Your user was not a valid MongoDB ID`), 
+  
+      body("userId") 
+  
+        .if((value, { req }) => useCase === 'update') // For 'update' 
+  
+        .optional() // Applies only to 'update'       
+  
+        .matches(/^[a-zA-Z0-9]{24}$/) 
+  
+        .withMessage(`Your user was not a valid MongoDB ID`),  
+  
+   
+  
+    ]; 
+  
+  }; 
+
 // Validation rules for class
 export const classValidationRules = () => {
   return [

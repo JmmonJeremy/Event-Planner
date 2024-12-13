@@ -1,106 +1,48 @@
-import { Request, Response, Router } from 'express';
-import GoalModel from '../models/goalsModel'; // Path to your goal model
+import { Router } from 'express'; 
 
-const goalRoutes = Router();
+import * as GoalController from '../controllers/goalController'; 
 
-// POST /goals - Create a new goal
-goalRoutes.post('/goals', async (req: Request, res: Response) => {
-  try {
-    const { name, description, dueDate } = req.body;
+import { validate, IDValidationRules, goalValidationRules} from '../config/validator'; 
 
-    // Create a new goal
-    const newGoal = new GoalModel({
-      name,
-      description,
-      dueDate,
-      userId: req.body.userId, // Assuming userId is passed in the request body
-    });
+ 
 
-    // Save the goal to the database
-    await newGoal.save();
+const goalRoutes = Router(); 
 
-    // Return a success message
-    res.status(201).json({
-      message: "Goal created successfully",
-      goal: newGoal
-    });
-  } catch (error) {
-    console.error('Error creating goal:', error);
-    res.status(400).json({ message: 'Bad Request' });
-  }
-});
+ 
 
-/*goalRoutes.post('/goals/createWithArray', async (req: Request, res: Response) => {
-    try {
-      const goalsArray = req.body; // Expecting an array of goal objects
-  
+// Route to create a new goal 
 
-      // Create multiple goals using insertMany
-      const newGoals = await GoalModel.insertMany(goalsArray);
-  
-      // Return success response
-      res.status(201).json({
-        message: "Goals created successfully",
-        goals: newGoals
-      });
-    } catch (error) {
-      console.error('Error creating goals:', error);
-      res.status(500).json({ message: 'Internal Server Error' });
-    }
-  });
-  */
+goalRoutes.post('/goals', goalValidationRules('create'), validate, GoalController.create); 
 
-// GET /goals/:goalId - Get a specific goal by ID
-goalRoutes.get('/goals/:goalId', async (req: Request, res: Response) => {
-    try {
-      const goal = await GoalModel.findById(req.params.goalId);
-      res.json(goal);  // If goal is null, this will return null
-    } catch (error) {
-      console.error('Error fetching goal:', error);
-      res.status(500).json({ message: 'Internal Server Error' });
-    }
-  });
-  
-// GET /goals/user/:userId - Get all goals for a specific user
-goalRoutes.get('/goals/user/:userId', async (req: Request, res: Response) => {
-    try {
-      const goals = await GoalModel.find({ userId: req.params.userId });
-      res.json(goals);  // If no goals, it returns an empty array
-    } catch (error) {
-      console.error('Error fetching goals for user:', error);
-      res.status(500).json({ message: 'Internal Server Error' });
-    }
-  });
-  
+ 
 
-// PUT /goals/:goalId - Update a specific goal by ID
-goalRoutes.put('/goals/:goalId', async (req: Request, res: Response) => {
-    try {
-      const { name, description, dueDate } = req.body;
-      const updatedGoal = await GoalModel.findByIdAndUpdate(
-        req.params.goalId,
-        { name, description, dueDate },
-        { new: true } // Return the updated goal
-      );
-  
-      res.json(updatedGoal);  // If goal doesn't exist, this will return null
-    } catch (error) {
-      console.error('Error updating goal:', error);
-      res.status(500).json({ message: 'Internal Server Error' });
-    }
-  });
-  
+// Route to create multiple goals 
 
-// DELETE /goals/:goalId - Delete a specific goal by ID
-goalRoutes.delete('/goals/:goalId', async (req: Request, res: Response) => {
-    try {
-      const deletedGoal = await GoalModel.findByIdAndDelete(req.params.goalId);
-      res.json(deletedGoal);  // If goal doesn't exist, this will return null
-    } catch (error) {
-      console.error('Error deleting goal:', error);
-      res.status(500).json({ message: 'Internal Server Error' });
-    }
-  });
-  
+goalRoutes.post('/goals/createWithArray', GoalController.createMany);  // Optional, if you want this feature 
 
-export default goalRoutes;
+ 
+
+// Route to get a specific goal by its ID 
+
+goalRoutes.get('/goals/:goalId', IDValidationRules('goalId'), validate, GoalController.getGoalById); 
+
+ 
+
+// Route to get all goals for a user by userId 
+
+goalRoutes.get('/goals/user/:userId', IDValidationRules('userId'), validate, GoalController.getGoalsByUserId); 
+
+ 
+
+// Route to update a goal by ID 
+
+goalRoutes.put('/goals/:goalId', IDValidationRules('goalId'), validate, GoalController.update);
+ 
+
+// Route to delete a goal by ID 
+
+goalRoutes.delete('/goals/:goalId', IDValidationRules('goalId'), validate, GoalController.deleteGoal); 
+
+ 
+
+export default goalRoutes;  
